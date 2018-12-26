@@ -1,0 +1,100 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: rgb(39,43,52);
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+
+#app-title {
+  font-size: 70px;
+font-family: 'Special Elite', cursive;
+}
+
+#github-info-form {
+  /* font-family: 'Gochi Hand'; */
+  /* font-family: 'Indie Flower';   */
+  font-family: 'Open Sans Condensed';
+  font-size: 2vw;
+  font-weight: bold;
+  /* |Gochi+Hand|Indie+Flower|Lobster|Open+Sans+Condensed:300|Pacifico|Satisfy|Special+Elite/ */
+}
+
+.input {
+    font-family: 'Open Sans Condensed';
+}
+
+#api-table {
+  border: 1px black solid;
+}
+
+.table-column{
+  border: 1px black solid;
+
+}
+.table-row{
+  border: 1px black solid;
+}
+
+#confused:hover {
+  color: blue;
+}
+
+
+
+.mm-popup {
+  background-color: white;
+  font-family: 'Open Sans Condensed';
+  font-size: 1.5vw;
+  font-weight: bold;
+  max-width: 50%;
+  border-radius: 3px;
+}
+
+.mm-popup__btn  {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mm-popup__btn--ok {
+  position:relative;
+   top:50%;
+   left:50%;
+   font-weight: bold;
+   border-radius: 3px;
+}
+
+.popup-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 5px;
+}
+
+.mm-popup__box__body {
+  margin: 2px;
+}
+
+.mm-popup__close {
+  display: none;
+}
+
+
+
+.search-bar{
+  margin: 5px;
+}
+
+.delete-button{
+  margin: 2px;
+}
