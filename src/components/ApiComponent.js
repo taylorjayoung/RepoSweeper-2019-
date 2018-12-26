@@ -152,7 +152,7 @@ saveRepoMapper = repos => {
          this.props.resetState();
        })
        .then(() => {
-         Popup.alert('Your repos have been swept! Congratulations! If you want to check your repos, generate a new token!');
+         Popup.alert('Your repos have been swept! Congratulations! If you want to check your repos, generate a new token or wait 5 minutes!');
        })
        .catch(() => {
          console.error(`Error deleting ${repo.name}...`);
