@@ -1,18 +1,25 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import $ from 'jquery';
 import { Button, Input, Icon } from 'semantic-ui-react'
 import Popup from 'react-popup';
-
 const axios = require('axios');
 const fs = require('browserify-fs');
 
+const optionsCursorTrueWithMargin = {
+  followCursor: true,
+  shiftX: 20,
+  shiftY: 10
+}
 
 export default class ApiComponent extends Component{
   state = {
-    repos: null,
     searchTerm: '',
+    displayForked: false,
     button: 'all',
-    forkedRepos: null
+    savedUnforkedRepos: [],
+    savedForkedRepos: [],
+    reposToDelete: [],
+    reposToSave: []
   }
 
   componentDidMount(){
@@ -22,7 +29,7 @@ export default class ApiComponent extends Component{
   async fetchRepos(user, token) {
     const username = user;
     const URL = `https://api.github.com/users/${user}/repos`;
-    const repos = [];
+    let apiRepos = [];
     let page = 1;
     let stopFinding = false;
     while (!stopFinding) {
@@ -38,15 +45,14 @@ export default class ApiComponent extends Component{
             stopFinding = true;
             return;
           }
-          const forkedRepos = res.data
+          const repo = res.data
           console.log(
-            `[Page ${page}] Found ${forkedRepos.length} forked repo(s) out of ${
+            `[Page ${page}] Found ${apiRepos.length} forked repo(s) out of ${
               res.data.length
             }:`,
 
           );
-          console.log(forkedRepos.join('\n') + '\n');
-          repos.push(...forkedRepos);
+          apiRepos.push(...repo);
           page++;
         })
         .catch(err => {
@@ -55,9 +61,10 @@ export default class ApiComponent extends Component{
         }, () => Popup.alert('Oops, something went wrong! Try another token if this doesn`t work again.'));
     }
     this.setState({
-      reposToBeDeleted: repos,
-      savedRepos: []
-    })
+      unforkedRepos: apiRepos.filter(repo => repo.fork === false),
+      forkedRepos: apiRepos.filter(repo => repo.fork === true),
+      reposToDelete: apiRepos
+    }, () => console.log(this.state))
   }
 
   searchHandler = (event) => {
@@ -66,27 +73,21 @@ export default class ApiComponent extends Component{
     })
   }
 
-  searchHandler = (event) => {
-    this.setState({
-      searchTerm: event.target.value
-    })
-  }
 
-
-repoMapper = repos => {
-    const repoList = this.state.forkedRepos ? this.state.forkedRepos : this.state.reposToBeDeleted
+repoMapper = (forkedRepos, unforkedRepos) => {
+    let repoList = this.state.reposToDelete
     if(this.state.searchTerm.length !== 0 ){
       repoList = repoList.filter(repo => {
-        return repo.name.includes(this.state.searchTerm)
+        return repo.name.toLowerCase().includes(this.state.searchTerm.toLowerCase()) || repo.description.toLowerCase().includes(this.state.searchTerm.toLowerCase())
       })
     }
-
     return repoList.map(repo => {
+      debugger
       return (<tr scope="row" key={repo.id} className="table-row">
         <td>{repo.id}</td>
         <td>{repo.name}</td>
         <td>{repo.description}</td>
-        <td>{repo.fork}</td>
+        <td>{repo.fork.toString()}</td>
         <td>{new Date(repo.created_at).toString().slice(0, 15)}</td>
         <td>{new Date(repo.updated_at).toString().slice(0, 15)}</td>
         <td><input type="checkbox" name={repo.id} onClick={event => this.checkHandler(event)} />&nbsp;</td>
@@ -95,59 +96,80 @@ repoMapper = repos => {
   }
 
 saveRepoMapper = repos => {
-    let repoList
-    if(this.state.searchTerm.length !== 0 ){
-      repoList = this.state.savedRepos.filter(repo => {
-        return repo.name.includes(this.state.searchTerm)
+    let savedRepoList = this.state.reposToSave
+
+    if(this.state.searchTerm.length !== 0 && savedRepoList.length > 0){
+      savedRepoList = savedRepoList.filter(repo => {
+        return repo.name.includes(this.state.searchTerm) || repo.description.includes(this.state.searchTerm)
       })
     }
-    else { repoList = this.state.savedRepos}
 
-    return repoList.map(repo => {
-      return (<tr scope="row" key={repo.id} className="table-row">
-        <td>{repo.id}</td>
-        <td>{repo.name}</td>
-        <td>{repo.description}</td>
-        <td>{repo.fork}</td>
-        <td>{new Date(repo.created_at).toString().slice(0, 15)}</td>
-        <td>{new Date(repo.updated_at).toString().slice(0, 15)}</td>
-        <td><input type="checkbox" name={repo.id} onClick={event => this.uncheckHandler(event)} />&nbsp;</td>
-      </tr>)
-    })
+    if(savedRepoList[0] === undefined || repos.length === 0){
+      return
+    }
+    else {
+      return savedRepoList.map(repo => {
+        return (<tr scope="row" key={repo.id} className="table-row">
+          <td>{repo.id}</td>
+          <td>{repo.name}</td>
+          <td>{repo.description}</td>
+          <td>{repo.fork.toString()}</td>
+          <td>{new Date(repo.created_at).toString().slice(0, 15)}</td>
+          <td>{new Date(repo.updated_at).toString().slice(0, 15)}</td>
+          <td><input type="checkbox" name={repo.id} onClick={event => this.uncheckHandler(event)} />&nbsp;</td>
+        </tr>)
+      })
+    }
   }
 
   checkHandler = (event) => {
-    let savedRepo
+    let savedRepos = this.state.reposToSave
       //This filter function returns all repos that do not match the clicked repo.id
       //It also sets the constant savedRepo to the repo that DOES match the clicked repo.id
       //Finally it updates the state
-      const updatedRepos = this.state.reposToBeDeleted.filter(repo => {
+      const updatedRepos = this.state.reposToDelete.filter(repo => {
         if(repo.id === parseInt(event.target.name)){
-          savedRepo = repo
+          savedRepos.push(repo)
         }
         return repo.id !== parseInt(event.target.name)
       })
       this.setState({
-        reposToBeDeleted: updatedRepos,
-        savedRepos: [...this.state.savedRepos, savedRepo]
-      })
-  }
+        reposToDelete: updatedRepos,
+        reposToSave: savedRepos
+      },() => console.log('updated saved', this.state.reposToSave))
+    }
+    // else {
+    //   const updatedRepos = this.state.forkedRepos.filter(repo => {
+    //     if(repo.id === parseInt(event.target.name)){
+    //       savedRepo = repo
+    //     }
+    //     return repo.id !== parseInt(event.target.name)
+    //   })
+    //   this.setState({
+    //     forkedRepos: updatedRepos,
+    //     savedForkedRepos: [...this.state.savedForkedRepos, savedRepo]
+    //   })
+    // }
+
+
+  // }
 
   uncheckHandler = (event) => {
     let unsavedRepo
-    const updatedSavedRepos = this.state.savedRepos.filter(repo => {
+    const updatedRepos = this.state.reposToSave.filter(repo => {
       if(repo.id === parseInt(event.target.name)){
         unsavedRepo = repo
       }
       return repo.id !== parseInt(event.target.name)
     })
     this.setState({
-      reposToBeDeleted: [...this.state.reposToBeDeleted, unsavedRepo],
-      savedRepos: updatedSavedRepos
-    })
+      reposToDelete: [...this.state.reposToDelete, unsavedRepo],
+      reposToSave: updatedRepos
+    }, () => console.log(this.state))
   }
 
-  deleteRepos = (repos, user, token ) => {
+  deleteRepos = (user, token ) => {
+   let repos = this.state.forkedRepos ? this.state.forkedRepos : this.state.reposToDelete
    repos.forEach(async repo => {
      const URL = `https://api.github.com/repos/${repo.full_name}`;
      await axios({
@@ -179,20 +201,26 @@ saveRepoMapper = repos => {
   }
   renderAllButton = () => {
     return (
-      <Button className="ui teal button" onClick={() => this.allButtonHandler()} >Want All Repos?</Button>
+      <Button className="ui teal button" onClick={() => this.allButtonHandler()} >Reset</Button>
     )
   }
 
   forkButtonHandler = () => {
-    const forkedRepos = this.state.reposToBeDeleted.filter(repo => {
-      return repo.fork
-    })
-      this.setState({ forkedRepos: forkedRepos})
+      this.setState({
+        reposToDelete: this.state.forkedRepos,
+        reposToSave: this.state.unforkedRepos,
+        displayForked: true
+      })
     }
 
   allButtonHandler = () => {
-      this.setState({ forkedRepos: null})
-    }
+    this.setState({
+      reposToDelete: [...this.state.forkedRepos, ...this.state.unforkedRepos],
+      displayForked: false,
+      reposToSave: []
+    })
+  }
+
 
   render(){
     return(
@@ -202,14 +230,15 @@ saveRepoMapper = repos => {
           <Input focus className="search-bar" placeholder="search repositories" onChange={(event) => this.searchHandler(event)}></Input>
         </div>
         <div className="buttonDiv">
-          {this.state.forkedRepos ? this.renderAllButton() : this.renderForkedButton()}
-          <Button animated className="red button button " onClick={() => this.deleteRepos(this.state.reposToBeDeleted, this.props.user, this.props.token)}>
+          {this.state.displayForked ? this.renderAllButton() : this.renderForkedButton()}
+          <Button animated className="red button button " onClick={() => this.deleteRepos(this.props.user, this.props.token)}>
             <Button.Content className="delete-button " visible>Delete Repos</Button.Content>
             <Button.Content hidden>
               <Icon name='trash alternate' />
             </Button.Content>
           </Button>
         </div>
+        <div id="table-div">
           <div id="delete-repos-table-div">
             <table className="table table-striped table-bordered table-sm" cellspacing="0" width="100%" id="api-table">
             <caption id="delete-repos-table-caption">Repos To Delete</caption>
@@ -223,7 +252,7 @@ saveRepoMapper = repos => {
                 <th scope="col" className="table-column">Updated Date</th>
                 <th scope="col" className="table-column">Save</th>
               </tr>
-                {this.state.reposToBeDeleted ? this.repoMapper(this.state.repos) : null }
+                {this.state.unforkedRepos ? this.repoMapper(this.state.reposToDelete) : null}
               </tbody>
             </table>
           </div>
@@ -240,11 +269,12 @@ saveRepoMapper = repos => {
                 <th scope="col" className="table-column">Updated Date</th>
                 <th scope="col" className="table-column">Delete</th>
               </tr>
-                {this.state.reposToBeDeleted ? this.saveRepoMapper(this.state.repos) : null }
+                {this.state.reposToSave.length > 0 ? this.saveRepoMapper(this.state.reposToSave) : null}
               </tbody>
             </table>
           </div>
         </div>
+       </div>
       </div>
     )
   }
