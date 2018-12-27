@@ -169,7 +169,7 @@ saveRepoMapper = repos => {
   }
 
   deleteRepos = (user, token ) => {
-   let repos = this.state.forkedRepos ? this.state.forkedRepos : this.state.reposToDelete
+   let repos = this.state.reposToDelete
    repos.forEach(async repo => {
      const URL = `https://api.github.com/repos/${repo.full_name}`;
      await axios({
