@@ -70,7 +70,7 @@ export default class ApiComponent extends Component{
   searchHandler = (event) => {
     this.setState({
       searchTerm: event.target.value
-    })
+    }, () => console.log(this.state.searchTerm))
   }
 
 
@@ -78,11 +78,22 @@ repoMapper = (forkedRepos, unforkedRepos) => {
     let repoList = this.state.reposToDelete
     if(this.state.searchTerm.length !== 0 ){
       repoList = repoList.filter(repo => {
-        return repo.name.toLowerCase().includes(this.state.searchTerm.toLowerCase()) || repo.description.toLowerCase().includes(this.state.searchTerm.toLowerCase())
+        if(repo.name && repo.description){
+          if(repo.name.toLowerCase().includes(this.state.searchTerm.toLowerCase()) || repo.description.toLowerCase().includes(this.state.searchTerm.toLowerCase()))
+          return repo
+        }
+        else if (repo.name && !repo.description){
+          if(repo.name.toLowerCase().includes(this.state.searchTerm.toLowerCase()))
+          return repo
+        }
+        else if (!repo.name && repo.description){
+          if(repo.description.toLowerCase().includes(this.state.searchTerm.toLowerCase()))
+          return repo
+        }
       })
     }
+
     return repoList.map(repo => {
-      debugger
       return (<tr scope="row" key={repo.id} className="table-row">
         <td>{repo.id}</td>
         <td>{repo.name}</td>
