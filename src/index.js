@@ -11,7 +11,6 @@ ReactDOM.render(
   <Popup />
   </div>,
   <App />,
-  document.getElementById('popupContainer')
   < />
   , document.getElementById('root'));
 

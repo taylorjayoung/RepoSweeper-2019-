@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button, Input, Icon } from 'semantic-ui-react'
+import instructionsHandler from './instructionsHandler'
 
 export default function renderGitHubInfoForm(generateApi){
   return(
@@ -10,7 +11,7 @@ export default function renderGitHubInfoForm(generateApi){
       <br></br>
       <div className="info-form-text">
       Access Token <Input focus className= "input" placeholder="8a01a5bd1fd6e4cc" name="token"></Input>
-      <p> <a href="https://github.com/settings/tokens" target="_blank">generate access token </a> | <a id="confused" onClick={() => this.instructionsHandler()}>confused?</a></p>
+      <p> <a href="https://github.com/settings/tokens" target="_blank">generate access token </a> | <a id="confused" onClick={() => instructionsHandler()}>confused?</a></p>
       </div>
       <br></br>
         <Button animated className="large ui button" onClick={(event) => generateApi(event)}>
