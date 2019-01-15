@@ -109,7 +109,7 @@ export default class ApiComponent extends Component{
 
   render(){
     return(
-      <div>
+      <div class="animated fadeInRight">
         <div>
         <div className="searchDiv">
           <Input focus className="search-bar" placeholder="search repositories" onChange={(event) => this.searchHandler(event)}></Input>

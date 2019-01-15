@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import './App.css';
+import './index.css';
 import ApiComponent from './components/ApiComponent'
 import homeButton from './functionalComponents/homeButton'
 import renderGitHubInfoForm from './functionalComponents/renderGitHubInfoForm'
@@ -44,13 +44,11 @@ class App extends Component {
 
   render() {
     return (
-        <div className="App">
-          <header className="App-header">
+        <header className="App">
           {this.state.on_home ? homeButton(this.homeButtonClickHandler) : null}
           {this.state.display_form ? renderGitHubInfoForm(this.generateApi) : null}
           {this.state.display_api ? <ApiComponent token={this.state.token} user={this.state.user} resetState={this.resetState}/> : null}
-          </header>
-        </div>
+        </header>
     );
   }
 }
