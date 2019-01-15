@@ -7,7 +7,7 @@ function homeButton(clickHandler){
     <div class="animated fadeInRight">
       <h1 id="app-title">RepoSweeper</h1>
       <div>
-        <Button size="huge" animated onClick={() => clickHandler()}>
+        <Button size="huge" color="blue" animated onClick={() => clickHandler()}>
           <Button.Content visible>Clean Up My Repos</Button.Content>
           <Button.Content hidden>
             <Icon name='arrow right' />

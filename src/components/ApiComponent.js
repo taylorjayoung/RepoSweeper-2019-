@@ -81,12 +81,12 @@ export default class ApiComponent extends Component{
   }
   renderForkedButton = () => {
     return (
-      <Button className="ui teal button" onClick={() => this.forkButtonHandler()} >Want Only Forked Repos?</Button>
+      <Button className="ui blue button forked-button" onClick={() => this.forkButtonHandler()} >Want Only Forked Repos?</Button>
     )
   }
   renderAllButton = () => {
     return (
-      <Button className="ui teal button" onClick={() => this.allButtonHandler()} >Reset</Button>
+      <Button className="ui blue button forked-button" onClick={() => this.allButtonHandler()} >Reset</Button>
     )
   }
 
@@ -109,58 +109,57 @@ export default class ApiComponent extends Component{
 
   render(){
     return(
-      <div class="animated fadeInRight">
-        <div>
-        <div className="searchDiv">
-          <Input focus className="search-bar" placeholder="search repositories" onChange={(event) => this.searchHandler(event)}></Input>
-        </div>
-        <div className="buttonDiv">
-          {this.state.displayForked ? this.renderAllButton() : this.renderForkedButton()}
-          <Button animated className="red button button " onClick={() => deleteRepos(this.props.user, this.props.token, this.state.reposToDelete, this.props.resetState)}>
-            <Button.Content className="delete-button " visible>Delete Repos</Button.Content>
-            <Button.Content hidden>
-              <Icon name='trash alternate' />
-            </Button.Content>
-          </Button>
-        </div>
-        <div id="table-div">
-          <div id="delete-repos-table-div">
-            <table className="table table-striped table-bordered table-sm" cellspacing="0" width="100%" id="api-table">
-            <caption id="delete-repos-table-caption">Repos To Delete</caption>
-              <tbody>
-              <tr className="table-row">
-                <th scope="col" className="table-column">#</th>
-                <th scope="col" className="table-column">Repo Name</th>
-                <th scope="col" className="table-column">Description</th>
-                <th scope="col" className="table-column">Forked</th>
-                <th scope="col" className="table-column">Created Date</th>
-                <th scope="col" className="table-column">Updated Date</th>
-                <th scope="col" className="table-column">Save</th>
-              </tr>
-                {this.state.reposLoaded ? repoMapper(this.state.reposToDelete, this.state.searchTerm, this.checkHandler) : null}
-              </tbody>
-            </table>
+        <div class="animated fadeInRight">
+          <div className="searchDiv">
+            <Input focus className="search-bar" placeholder="search repositories" style={{width: "25vw"}} onChange={(event)=> this.searchHandler(event)}></Input>
+            <div className="search-buttons">
+            {this.state.displayForked ? this.renderAllButton() : this.renderForkedButton()}
+            <Button animated className="red button delete-button" onClick={()=> deleteRepos(this.props.user, this.props.token, this.state.reposToDelete, this.props.resetState)}>
+              <Button.Content visible>Delete Repos</Button.Content>
+              <Button.Content hidden>
+                <Icon name='trash alternate' />
+              </Button.Content>
+            </Button>
+            </div>
           </div>
-          <div id="save-repos-table-div">
-            <table className="table table-striped table-bordered table-sm" cellspacing="0" width="100%" id="api-table">
-            <caption id="save-repos-table-caption">Saved Repos</caption>
-              <tbody>
-              <tr className="table-row">
-                <th scope="col" className="table-column">#</th>
-                <th scope="col" className="table-column">Repo Name</th>
-                <th scope="col" className="table-column">Description</th>
-                <th scope="col" className="table-column">Forked</th>
-                <th scope="col" className="table-column">Created Date</th>
-                <th scope="col" className="table-column">Updated Date</th>
-                <th scope="col" className="table-column">Delete</th>
-              </tr>
-                {this.state.reposToSave.length > 0 ? saveRepoMapper(this.state.reposToSave, this.state.searchTerm, this.uncheckHandler) : null}
-              </tbody>
-            </table>
+            <br/>
+          <div id="table-div">
+            <div id="delete-repos-table-div">
+              <table className="table table-striped table-bordered table-sm" cellspacing="0" width="100%" id="api-table">
+                <caption id="delete-repos-table-caption">Repos To Delete</caption>
+                <tbody>
+                  <tr className="table-row">
+                    <th scope="col" className="table-column">#</th>
+                    <th scope="col" className="table-column">Repo Name</th>
+                    <th scope="col" className="table-column">Description</th>
+                    <th scope="col" className="table-column">Forked</th>
+                    <th scope="col" className="table-column">Created Date</th>
+                    <th scope="col" className="table-column">Updated Date</th>
+                    <th scope="col" className="table-column">Save</th>
+                  </tr>
+                  {this.state.reposLoaded ? repoMapper(this.state.reposToDelete, this.state.searchTerm, this.checkHandler) : null}
+                </tbody>
+              </table>
+            </div>
+            <div id="save-repos-table-div">
+              <table className="table table-striped table-bordered table-sm" cellspacing="0" width="100%" id="api-table">
+                <caption id="save-repos-table-caption">Saved Repos</caption>
+                <tbody>
+                  <tr className="table-row">
+                    <th scope="col" className="table-column">#</th>
+                    <th scope="col" className="table-column">Repo Name</th>
+                    <th scope="col" className="table-column">Description</th>
+                    <th scope="col" className="table-column">Forked</th>
+                    <th scope="col" className="table-column">Created Date</th>
+                    <th scope="col" className="table-column">Updated Date</th>
+                    <th scope="col" className="table-column">Delete</th>
+                  </tr>
+                  {this.state.reposToSave.length > 0 ? saveRepoMapper(this.state.reposToSave, this.state.searchTerm, this.uncheckHandler) : null}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-       </div>
-      </div>
     )
   }
 
