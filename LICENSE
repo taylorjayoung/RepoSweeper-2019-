@@ -1,11 +1,10 @@
 The core logic of this app belongs to the license below. I simply created an interface for the logic and
 implemented a cleaner way of selecting which repos to save/delete.
 
-Copyright (c) 2019 Taylor Young and Johrten Sternberg
+Copyright (c) 2019 Taylor J. Young and Johrten Sternberg
 
 
 MIT License
-
 Copyright (c) 2017 Yangshun Tay
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
