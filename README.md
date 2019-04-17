@@ -1,5 +1,6 @@
 App Name:
  RepoSweeper
+<font size="+1">Description</font>
 
 Description:
  Deleting GitHub repositories via the GitHub interface is a hassle. For each repository that you want to delete, you have to go to the individual repository settings, enter your password and the name of the repository. This is not scalable as task. If you contribute to open source a fair bit or have many forked repositories that you may not necessarily want to keep, it could take hours to clean up your GitHub.
