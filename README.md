@@ -1,4 +1,4 @@
-App Name:
+#App Name:
  RepoSweeper
 <font size="+1">Description</font>
 
