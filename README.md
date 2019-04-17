@@ -1,13 +1,35 @@
-App Name:
  RepoSweeper
 
-Description:
- Deleting GitHub repositories via the GitHub interface is a hassle. For each repository that you want to delete, you have to go to the individual repository settings, enter your password and the name of the repository. This is not scalable as task. If you contribute to open source a fair bit or have many forked repositories that you may not necessarily want to keep, it could take hours to clean up your GitHub.
+ Deleting GitHub repositories via the GitHub interface is a hassle. For each repository that you want to delete, you have to go to the individual repository settings, enter the name of the repository and confirm. This is not a scalable as task. There are many scripts you can use to bulk erase repositories from the command line, but they don't offer much flexibility. RepoSweeper is a React.js SPA that allows you to sort, filter and manage which repositories you want to delete, and to do so in one click of a button.
 
- There are many scripts you can use to bulk erase repositories, but there is no UI and it is difficult to manage which you want to actually keep and delete.  Now you can fetch a list of your GitHub repositories and manually select the unwanted repositories, then delete them in one go.
+ Getting Started
+ RepoSweeper is a tool that is meant to be used as a web application. It is pretty slim on the code side. If you just want to use the tool, visit https://repo-sweeper.herokuapp.com/
 
-Principal Engineer:
- Taylor Young
+ If you are interested in making changes to the code and working in a development setting, there are three simple steps:
+ 
+ 1. Fork the repository
+ 2. Git clone the repository in your terminal
+ 3. npm install
 
-UI Developer:
- Johrten Sternberg
+ Start editing as you please, and when you're ready to check out your changes, just run:
+
+ 4. npm start
+
+ Built With
+ React.js
+ GitHub API
+
+ Contributing
+ Please read CONTRIBUTING.md for details on our code of conduct, and the process for submitting pull requests to us.
+
+
+
+ Authors
+ Taylor Young - Principal Engineer
+ Johrten Sternberg - UI Engineer
+
+ License
+ This project is licensed under the MIT License - see the LICENSE.md file for details
+
+ Acknowledgments
+@sinyoungnam for the inspiration
