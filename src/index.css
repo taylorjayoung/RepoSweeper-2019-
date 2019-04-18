@@ -256,3 +256,8 @@ body {
   width: 15vw;
   margin-right: 0px !important;
 }
+
+.table {
+  max-width: 80%;
+  margin: auto;
+}
