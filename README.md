@@ -1,4 +1,4 @@
- RepoSweeper
+ <h1 align='center'> RepoSweeper (Mass-Delete GitHub Repositories) </h1>
 
  <img src="./RepoSweeper.png" alt=""/>
 
