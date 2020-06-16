@@ -7,6 +7,8 @@
  <h3>Getting Started</h3>
  RepoSweeper is a tool that is meant to be used as a web application. It is pretty slim on the code side. If you just want to use the tool, visit https://repo-sweeper.herokuapp.com/
 
+ Read more about how to use here: https://medium.com/@taylorjayoung/the-easiest-way-to-delete-multiple-github-repositories-at-once-e71e16734b59
+
  If you are interested in making changes to the code and working in a development setting, there are three simple steps:
  1. Fork the repository
  2. Git clone the repository in your terminal
