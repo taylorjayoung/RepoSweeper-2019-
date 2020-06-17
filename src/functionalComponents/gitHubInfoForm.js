@@ -2,7 +2,7 @@ import React from 'react'
 import { Button, Input, Icon } from 'semantic-ui-react'
 import instructionsHandler from './instructionsHandler'
 
-export default function renderGitHubInfoForm(generateApi){
+export default function gitHubInfoForm(generateApi){
   return(
     <form id="github-info-form" name="github-info-form" class="animated fadeInRight">
       <label>GitHub Username & Access Token</label>
