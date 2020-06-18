@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import './index.css';
-import ApiComponent from './components/ApiComponent'
-import homeButton from './functionalComponents/homeButton'
-import gitHubInfoForm from './functionalComponents/gitHubInfoForm'
-import instructionsHandler from './functionalComponents/instructionsHandler'
-   import {homeButtonClickHandler, generateApi, resetState} from './helpers/helperFunctions.js'
-   import EnhancedTable from './functionalComponents/materialUITable'
+import ApiMainWrapper from './components/api/ApiMainWrapper'
+import homeButton from './functionalComponents/handlers/homeButton'
+import gitHubInfoForm from './helpers/main/gitHubInfoForm'
+import instructionsHandler from './functionalComponents/handlers/instructionsHandler'
+   import {homeButtonClickHandler, generateApi, resetState} from './helpers/main/helperFunctions.js'
+   import EnhancedTable from './functionalComponents/table/materialUITable'
 class App extends Component {
   state = {
     on_home: true,
@@ -26,10 +26,9 @@ class App extends Component {
   render() {
     return (
         <header className="App">
-          // {this.state.on_home ? homeButton(this.homeButtonClickHandler) : null}
-          {this.state.on_home ? <EnhancedTable /> : null}
+          {this.state.on_home ? homeButton(this.homeButtonClickHandler) : null}
           {this.state.display_form ? gitHubInfoForm(this.generateApi) : null}
-          {this.state.display_api ? <ApiComponent token={this.state.token} user={this.state.user} resetState={this.resetState}/> : null}
+          {this.state.display_api ? <ApiMainWrapper token={this.state.token} user={this.state.user} resetState={this.resetState}/> : null}
         </header>
     );
   }

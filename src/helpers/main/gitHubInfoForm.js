@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, Input, Icon } from 'semantic-ui-react'
-import instructionsHandler from './instructionsHandler'
+import instructionsHandler from '../../functionalComponents/handlers/instructionsHandler'
 
 export default function gitHubInfoForm(generateApi){
   return(

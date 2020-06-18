@@ -40,6 +40,7 @@ async function fetchRepos(user, token, setStateFunction){
   const unforkedRepos = apiRepos.filter(repo => repo.fork === false)
   const forkedRepos = apiRepos.filter(repo => repo.fork === true)
   const allRepos = apiRepos
+  console.log(`all repositories: ${JSON.stringify(apiRepos)}`)
   setStateFunction(unforkedRepos, forkedRepos, allRepos)
 }
 
