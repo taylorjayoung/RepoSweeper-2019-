@@ -44,16 +44,3 @@ export function forkButtonHandler(){
       displayForked: true
     })
   }
-
-// export  function allButtonHandler(){
-//   try{
-//     this.setState({
-//       reposToDelete: [...this.state.forkedRepos, ...this.state.unforkedRepos],
-//       displayForked: false,
-//       reposToSave: []
-//     })
-//   } catch(e){
-//     console.log(`broken...`)
-//   }
-
-// }

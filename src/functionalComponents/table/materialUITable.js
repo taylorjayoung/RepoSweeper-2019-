@@ -51,17 +51,12 @@ function stableSort(array, comparator) {
 
 
 const headCells = [
-  {
-    id: "id",
-    numeric: false,
-    disablePadding: true,
-    label: "id"
-  },
   { id: "name", numeric: false, disablePadding: false, label: "Name" },
+  { id: "id", numeric: false, disablePadding: true, label: "id" },
   { id: "description", numeric: false, disablePadding: false, label: "Description" },
+  { id: "forked", numeric: false, disablePadding: false, label: "Forked" },
   { id: "createdDate", numeric: false, disablePadding: false, label: "Created Date" },
-  { id: "updatedDate", numeric: false, disablePadding: false, label: "Updated Date" },
-  { id: "forked", numeric: false, disablePadding: false, label: "Forked" }
+  { id: "updatedDate", numeric: false, disablePadding: false, label: "Updated Date" }
 ];
 
 function EnhancedTableHead(props) {
@@ -272,7 +267,7 @@ export default function EnhancedTable(props) {
 
   try{
     emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-  
+
   } catch(e){
     console.log(`error! ${e}`)
   }
@@ -304,7 +299,9 @@ export default function EnhancedTable(props) {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);
                   const labelId = `enhanced-table-checkbox-${index}`;
-
+                  console.log(`row mapping: ${row}`)
+                  console.log(`label: ${labelId}`)
+                  console.log(`index: ${index}`)
                   return (
                     <TableRow
                       hover
@@ -329,10 +326,11 @@ export default function EnhancedTable(props) {
                       >
                         {row.name}
                       </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
+                      <TableCell align="right">{row.id}</TableCell>
+                      <TableCell align="right">{row.description}</TableCell>
+                      <TableCell align="right">{row.fork}</TableCell>
+                      <TableCell align="right">{row.createdDate}</TableCell>
+                      <TableCell align="right">{row.updatedDate}</TableCell>
                     </TableRow>
                   );
                 })}
