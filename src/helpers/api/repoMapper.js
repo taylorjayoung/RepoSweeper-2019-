@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function repoMapper(repos, searchterm, checkHandler){
     let repoList = repos
-    if(searchterm.length !== 0 ){
+    if(searchterm && searchterm.length !== 0 ){
       repoList = repoList.filter(repo => {
         if(repo.name && repo.description){
           if(repo.name.toLowerCase().includes(searchterm.toLowerCase()) || repo.description.toLowerCase().includes(searchterm.toLowerCase()))
@@ -21,7 +21,7 @@ export default function repoMapper(repos, searchterm, checkHandler){
 
       const rows = []
 
-      return repoList.forEach(repo => {
+      repoList.forEach(repo => {
         const currentRow = {
           id: repo.id ? repo.id : null,
           name: repo.name ? repo.name : null,
@@ -32,6 +32,9 @@ export default function repoMapper(repos, searchterm, checkHandler){
         }
         rows.push(currentRow)
       })
+
+      console.log('repo mapper:')
+      console.log(rows)
 
       return rows
     }

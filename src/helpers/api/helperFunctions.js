@@ -1,14 +1,5 @@
-export function fetchStateSetter(unforkedRepositories, forkedRepositories, allRepos){
-  this.setState({
-    unforkedRepos: unforkedRepositories,
-    forkedRepos: forkedRepositories,
-    reposToDelete: allRepos,
-    reposLoaded: true
-  })
-}
 
-
-export function searchHandler(event) {
+export default function searchHandler(event) {
   this.setState({
     searchTerm: event.target.value
   })
@@ -54,15 +45,15 @@ export function forkButtonHandler(){
     })
   }
 
-export default function allButtonHandler(){
-  try{
-    this.setState({
-      reposToDelete: [...this.state.forkedRepos, ...this.state.unforkedRepos],
-      displayForked: false,
-      reposToSave: []
-    })
-  } catch(e){
-    console.log(`broken... forked: ${this.state.forkedRepos}, unforked: ${this.state.unforkedRepos}`)
-  }
+// export  function allButtonHandler(){
+//   try{
+//     this.setState({
+//       reposToDelete: [...this.state.forkedRepos, ...this.state.unforkedRepos],
+//       displayForked: false,
+//       reposToSave: []
+//     })
+//   } catch(e){
+//     console.log(`broken...`)
+//   }
 
-}
+// }
