@@ -18,6 +18,7 @@ const optionsCursorTrueWithMargin = {
 export default class ApiMainWrapper extends Component{
   state = {
     rows: [],
+    originalRows: [],
     phase: 0,
     selected: []
   }
@@ -30,7 +31,7 @@ export default class ApiMainWrapper extends Component{
     fetchRepos(this.props.user, this.props.token)
     .then( result => {
       const rows = repoMapper(result)
-      this.setState({rows, reposLoaded: true, phase: 1})
+      this.setState({rows, reposLoaded: true, phase: 1, originalRows: rows})
     })
   }
 
@@ -51,7 +52,7 @@ if ( phase === 1){
     else if(phase === 2){
       return(
         <div>
-        <Button animated className="blue button" onClick={()=> this.updatePhase(-1)}>
+        <Button animated className="blue button" onClick={()=> this.updatePhase(-1, 'back')}>
           <Button.Content visible>Go back</Button.Content>
           <Button.Content hidden>
             <Icon name='arrow left' />
@@ -67,21 +68,40 @@ if ( phase === 1){
       )
     }
     else if (phase === 3){
-
     }
 
   }
 
-  updatePhase(move){
-    this.setState({phase: this.state.phase + move}, () => console.log(`phase state: ${this.state.phase}`))
+updatePhase(move, exception){
+    const updatedPhase = this.state.phase + move
+    console.log(`updating phase from ${this.state.phase} to ${updatedPhase}`)
+    if( updatedPhase === 1 &! exception){
+      this.setState({phase: updatedPhase })
+    }
+    else if (updatedPhase === 1 && exception){
+      this.setState({phase: updatedPhase, rows: this.state.originalRows })
+    }
+    if( updatedPhase === 2){
+      const rowsToDelete = [];
+      this.state.rows.forEach( row => {
+        if(this.state.selected.includes(row.name)){
+          rowsToDelete.push(row)
+        }
+      })
+      this.setState({
+        rows: rowsToDelete,
+        phase: updatedPhase
+      })
+    }
   }
 
   instructionsHandler(phase){
+    console.log(`instructions handler phase: ${phase}`)
       switch(phase){
         case 1 :
           return 'Select Repos to Delete then hit Continue'
         case 2 :
-          return 'Make sure these are the repos you want to delete.. then hit Confirm'
+          return 'Are you sure you want to delete the following repos?'
         default:
           break
       }
