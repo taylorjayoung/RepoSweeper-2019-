@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { lighten, makeStyles } from "@material-ui/core/styles";
@@ -210,22 +210,29 @@ export default function EnhancedTable(props) {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const rows = props.rows
-console.log(`props.rows: ${props.rows}`)
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
+  useEffect(() => {
+    console.log(`selectd in table comp: ${props.selected}`)
+       setSelected(props.selected);
+   }, [props.selected])
+
   const handleSelectAllClick = event => {
     if (event.target.checked) {
       const newSelecteds = rows.map(n => n.name);
-      setSelected(newSelecteds);
+      props.updateSelected(newSelecteds)
       return;
+    } else{
+      props.updateSelected([])
     }
-    setSelected([]);
+return
   };
 
   const handleClick = (event, name) => {
@@ -244,8 +251,9 @@ console.log(`props.rows: ${props.rows}`)
         selected.slice(selectedIndex + 1)
       );
     }
+    console.log('new selected:', newSelected, `selected index: ${selectedIndex}`)
 
-    setSelected(newSelected);
+    props.updateSelected(newSelected);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -299,7 +307,7 @@ console.log(`props.rows: ${props.rows}`)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);
                   const labelId = `enhanced-table-checkbox-${index}`;
-                  
+
                   return (
                     <TableRow
                       hover
