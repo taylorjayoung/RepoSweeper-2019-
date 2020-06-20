@@ -24,41 +24,37 @@ const optionsCursorTrueWithMargin = {
 
 export default class ApiMainWrapper extends Component{
   state = {
-    searchTerm: '',
-    reposLoaded: false
+    rows: []
   }
 
 
-  searchHandler = searchHandler.bind(this)
   checkHandler = checkHandler.bind(this)
   uncheckHandler = uncheckHandler.bind(this)
   buttonHandler = buttonHandler.bind(this)
   forkButtonHandler = forkButtonHandler.bind(this)
   allButtonHandler = allButtonHandler.bind(this)
-  stateSetter = this.stateSetter.bind(this)
+  // stateSetter = this.stateSetter.bind(this)
 
-  componentDidMount(){
+  async componentDidMount(){
     fetchRepos(this.props.user, this.props.token, this.stateSetter)
-  }
-
- stateSetter(unforkedRepositories, forkedRepositories, allRepos){
-      this.setState({
-        repos: allRepos,
-        reposLoaded: true
-      }, () => {console.log(`set state in fetch setter`)})
+    .then( result => {
+      const rows = repoMapper(result)
+      console.log('repos: ', rows)
+      this.setState({rows, reposLoaded: true})
+    })
   }
 
 
   render(){
     const { user, token, resetState } = this.props
-    const { repos, searchTerm, reposLoaded } = this.state
+    const { rows, searchTerm, reposLoaded } = this.state
     const { renderAllButton, renderForkedButton, searchHandler, checkHandler } = this
     return(
         <div class="animated fadeInRight">
           <div className="searchDiv">
             <Input focus className="search-bar" placeholder="search repositories" style={{width: "25vw"}} onChange={(event)=> searchHandler(event)}></Input>
             <div className="search-buttons">
-            <Button animated className="red button delete-button" onClick={()=> deleteRepos(user, token, repos, resetState)}>
+            <Button animated className="red button delete-button" onClick={()=> deleteRepos(user, token, resetState)}>
               <Button.Content visible>Delete Repos</Button.Content>
               <Button.Content hidden>
                 <Icon name='trash alternate' />
@@ -69,7 +65,7 @@ export default class ApiMainWrapper extends Component{
             <br/>
           <div id="table-div">
             <div id="new-table">
-              {reposLoaded ? <MaterialUITable repos={repos} /> : null}
+              {reposLoaded ? <MaterialUITable rows={rows} /> : null}
             </div>
           </div>
         </div>

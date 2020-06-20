@@ -37,11 +37,9 @@ async function fetchRepos(user, token, setStateFunction){
         stopFinding = true;
       }, () => Popup.alert('Oops, something went wrong! Try another token if this doesn`t work again.'));
   }
-  const unforkedRepos = apiRepos.filter(repo => repo.fork === false)
-  const forkedRepos = apiRepos.filter(repo => repo.fork === true)
-  const allRepos = apiRepos
-  console.log(`all repositories: ${JSON.stringify(apiRepos)}`)
-  setStateFunction(unforkedRepos, forkedRepos, allRepos)
+
+
+  return apiRepos
 }
 
 export default fetchRepos
