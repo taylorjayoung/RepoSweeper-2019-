@@ -36,7 +36,7 @@ export default class ApiMainWrapper extends Component{
   }
 
 
-buttonRender(phase, user, token){
+buttonRender(phase, user, token, repos, resetState){
 if ( phase === 1){
       return(
         <div>
@@ -58,7 +58,7 @@ if ( phase === 1){
             <Icon name='arrow left' />
           </Button.Content>
         </Button>
-        <Button animated className="red button delete-button" onClick={()=> deleteRepos(user, token)}>
+        <Button animated className="red button delete-button" onClick={()=> deleteRepos(user, token, repos, resetState)}>
           <Button.Content visible>Confirm</Button.Content>
           <Button.Content hidden>
             <Icon name='trash alternate' />
@@ -74,7 +74,7 @@ if ( phase === 1){
 
 updatePhase(move, exception){
     const updatedPhase = this.state.phase + move
-    console.log(`updating phase from ${this.state.phase} to ${updatedPhase}`)
+
     if( updatedPhase === 1 &! exception){
       this.setState({phase: updatedPhase })
     }
@@ -121,7 +121,7 @@ updatePhase(move, exception){
           <div className="selectionDiv">
             <h1>{instructionsHandler(phase)}</h1>
             <div className="buttons">
-                { buttonRender(phase, user, token )}
+                { buttonRender(phase, user, token, rows, resetState )}
             </div>
           </div>
             <br/>

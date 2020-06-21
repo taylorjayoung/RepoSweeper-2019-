@@ -24,7 +24,7 @@ export default function repoMapper(repos, searchterm, checkHandler){
       repoList.forEach(repo => {
         let description = repo.description ? repo.description : null
         if(!description || description.length < 1) description = 'No description'
-
+        console.log(`full name: ${repo.full_name}`)
         const currentRow = {
           id: repo.id ? repo.id : null,
           name: repo.name ? repo.name : null,
@@ -32,6 +32,7 @@ export default function repoMapper(repos, searchterm, checkHandler){
           fork: repo.fork.toString() ? repo.fork.toString() : null,
           createdDate: new Date(repo.created_at).toString().slice(0, 15),
           updatedDate: new Date(repo.updated_at).toString().slice(0, 15),
+          full_name: repo.full_name
         }
         rows.push(currentRow)
       })
