@@ -50,15 +50,15 @@ if ( phase === 1){
         )
       }
     else if(phase === 2){
-      return(
-        <div>
+     return(
+       <div>
         <Button animated className="blue button" onClick={()=> this.updatePhase(-1, 'back')}>
           <Button.Content visible>Go back</Button.Content>
           <Button.Content hidden>
             <Icon name='arrow left' />
           </Button.Content>
         </Button>
-        <Button animated className="red button delete-button" onClick={()=> deleteRepos(user, token, repos, resetState)}>
+        <Button animated className="red button delete-button" onClick={()=> deleteRepos(user, token, this.getRowsToDelete(), resetState)}>
           <Button.Content visible>Confirm</Button.Content>
           <Button.Content hidden>
             <Icon name='trash alternate' />
@@ -66,8 +66,10 @@ if ( phase === 1){
         </Button>
         </div>
       )
+
     }
     else if (phase === 3){
+      return
     }
 
   }
@@ -107,7 +109,15 @@ updatePhase(move, exception){
       }
   }
 
+  getRowsToDelete(){
+    const rowsToDelete = [];
+    return this.state.rows.filter( row => {
+       return this.state.selected.includes(row.name)
+     })
+  }
+
   updateSelected(selectedRows){
+    console.log(`update selected: ${selectedRows}`)
     this.setState({selected: selectedRows})
   }
 

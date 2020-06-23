@@ -4,7 +4,8 @@ const axios = require('axios');
 const fs = require('browserify-fs');
 
 function deleteRepos(user, token, repos, resetState){
-
+  console.log(`repos to delete: ${repos}`)
+return
 //confirmation popup
  Popup.create({
      title: null,
