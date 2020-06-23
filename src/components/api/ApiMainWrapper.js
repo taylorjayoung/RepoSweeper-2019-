@@ -111,9 +111,14 @@ updatePhase(move, exception){
 
   getRowsToDelete(){
     const rowsToDelete = [];
-    return this.state.rows.filter( row => {
+    console.log(`getting rows to delete:
+      selected: ${JSON.stringify(this.state.selected)},
+      rows: ${JSON.stringify(this.state.rows)}`)
+    const finalRows =  this.state.rows.filter( row => {
        return this.state.selected.includes(row.name)
      })
+     console.log(JSON.stringify(finalRows))
+     return finalRows
   }
 
   updateSelected(selectedRows){
