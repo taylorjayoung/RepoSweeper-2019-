@@ -220,7 +220,6 @@ export default function EnhancedTable(props) {
   };
 
   useEffect(() => {
-    console.log(`selectd in table comp: ${props.selected}`)
        setSelected(props.selected);
    }, [props.selected])
 
@@ -251,8 +250,6 @@ return
         selected.slice(selectedIndex + 1)
       );
     }
-    console.log('new selected:', newSelected, `selected index: ${selectedIndex}`)
-
     props.updateSelected(newSelected);
   };
 
