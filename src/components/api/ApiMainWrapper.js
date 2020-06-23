@@ -50,22 +50,23 @@ if ( phase === 1){
         )
       }
     else if(phase === 2){
-     return(
-       <div>
-        <Button animated className="blue button" onClick={()=> this.updatePhase(-1, 'back')}>
-          <Button.Content visible>Go back</Button.Content>
-          <Button.Content hidden>
-            <Icon name='arrow left' />
-          </Button.Content>
-        </Button>
-        <Button animated className="red button delete-button" onClick={()=> deleteRepos(user, token, this.getRowsToDelete(), resetState)}>
-          <Button.Content visible>Confirm</Button.Content>
-          <Button.Content hidden>
-            <Icon name='trash alternate' />
-          </Button.Content>
-        </Button>
-        </div>
-      )
+      const rowsToDelete = this.getRowsToDelete()
+       return(
+         <div>
+          <Button animated className="blue button" onClick={()=> this.updatePhase(-1, 'back')}>
+            <Button.Content visible>Go back</Button.Content>
+            <Button.Content hidden>
+              <Icon name='arrow left' />
+            </Button.Content>
+          </Button>
+          <Button animated className="red button delete-button" onClick={()=> deleteRepos(user, token, rowsToDelete, resetState)}>
+            <Button.Content visible>Confirm</Button.Content>
+            <Button.Content hidden>
+              <Icon name='trash alternate' />
+            </Button.Content>
+          </Button>
+          </div>
+        )
 
     }
     else if (phase === 3){
@@ -117,8 +118,7 @@ updatePhase(move, exception){
     const finalRows =  this.state.rows.filter( row => {
        return this.state.selected.includes(row.name)
      })
-     console.log(JSON.stringify(finalRows))
-     return finalRows
+     console.log('final rows: ',JSON.stringify(finalRows))
   }
 
   updateSelected(selectedRows){
