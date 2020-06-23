@@ -20,7 +20,8 @@ export default class ApiMainWrapper extends Component{
     rows: [],
     originalRows: [],
     phase: 0,
-    selected: []
+    selected: [],
+    rowsToDelete: []
   }
 
 
@@ -36,7 +37,7 @@ export default class ApiMainWrapper extends Component{
   }
 
 
-buttonRender(phase, user, token, repos, resetState){
+buttonRender(phase, user, token, rowsToDelete, resetState){
 if ( phase === 1){
       return(
         <div>
@@ -50,7 +51,6 @@ if ( phase === 1){
         )
       }
     else if(phase === 2){
-      const rowsToDelete = this.getRowsToDelete()
        return(
          <div>
           <Button animated className="blue button" onClick={()=> this.updatePhase(-1, 'back')}>
@@ -110,33 +110,27 @@ updatePhase(move, exception){
       }
   }
 
-  getRowsToDelete(){
-    const rowsToDelete = [];
-    console.log(`getting rows to delete:
-      selected: ${JSON.stringify(this.state.selected)},
-      rows: ${JSON.stringify(this.state.rows)}`)
-    const finalRows =  this.state.rows.filter( row => {
-       return this.state.selected.includes(row.name)
-     })
-     console.log('final rows: ',JSON.stringify(finalRows))
-  }
 
   updateSelected(selectedRows){
-    console.log(`update selected: ${selectedRows}`)
-    this.setState({selected: selectedRows})
+
+    const rowsToDelete =  this.state.rows.filter( row => {
+       return selectedRows.includes(row.name)
+     })
+
+    this.setState({selected: selectedRows, rowsToDelete}, () => console.log(`the mfs getting deleted are.. ${this.state.rowsToDelete}`))
   }
 
 
   render(){
     const { user, token, resetState } = this.props
-    const { rows, reposLoaded, phase, selected } = this.state
+    const { rows, reposLoaded, phase, selected, rowsToDelete } = this.state
     const { buttonRender, instructionsHandler, updateSelected} = this
     return(
         <div class="animated fadeInRight">
           <div className="selectionDiv">
             <h1>{instructionsHandler(phase)}</h1>
             <div className="buttons">
-                { buttonRender(phase, user, token, rows, resetState )}
+                { buttonRender(phase, user, token, rowsToDelete, resetState )}
             </div>
           </div>
             <br/>
