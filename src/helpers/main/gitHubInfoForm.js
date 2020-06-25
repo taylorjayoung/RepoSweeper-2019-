@@ -3,12 +3,29 @@ import { Button, Input, Icon } from 'semantic-ui-react'
 import instructionsHandler from '../../functionalComponents/handlers/instructionsHandler'
 
 export default function gitHubInfoForm(username, apiFormHandler){
+  console.log(`username info form: ${username}`)
+
+  const renderNamedInput = (username) => {
+    console.log('named user: ', username)
+    return(
+      <Input focus className="input" name="user" value={username} onKeyUp={(event)=> apiFormHandler(event)}></Input>
+    )
+  }
+  const renderNamelessInput = (username) => {
+    return(
+      <Input focus className="input" name="user" onKeyUp={(event)=> apiFormHandler(event)}>{username}</Input>
+    )
+  }
+
   return(
     <form id="github-info-form" name="github-info-form" class="animated fadeInRight">
       <label>GitHub Username & Access Token</label>
       <label></label>
       <div className="info-form-text">
-        <Input focus className="input" placeholder={username || 'githubUser1'} name="user" onKeyUp={(event)=> apiFormHandler(event)}></Input>
+        { username !== null ?
+          <Input focus className="input" name="user" value={username} onKeyUp={(event)=> apiFormHandler(event)}></Input>
+          : <Input focus className="input" placeholder='githubUser1' name="user" onKeyUp={(event)=> apiFormHandler(event)}></Input>
+        }
       </div>
       <div className="info-form-text">
         <Input focus className="input" placeholder="8a01a5bd1fd6e4cc" name="token" onKeyUp={(event)=> apiFormHandler(event)}></Input>

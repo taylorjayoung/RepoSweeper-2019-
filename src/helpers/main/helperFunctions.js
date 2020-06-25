@@ -51,7 +51,8 @@ export  function apiFormHandler(event){
       this.setState({
         display_form: false,
         on_home: false,
-        form_submitted: true
+        form_submitted: true,
+        submittedUsername: this.state.username
       }, () => console.log(`setting state after form: ${JSON.stringify(this.state)}`))
     }
   }

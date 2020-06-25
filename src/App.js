@@ -17,6 +17,7 @@ class App extends Component {
     form_info: {},
     token: null,
     username: null,
+    submittedUsername: null,
     apiRepos: []
   }
 
@@ -51,7 +52,7 @@ class App extends Component {
     return (
         <header className="App">
           {this.state.on_home ? homeButton(this.homeButtonClickHandler) : null}
-          {this.state.display_form ? gitHubInfoForm(this.state.username, this.apiFormHandler) : null}
+          {this.state.display_form ? gitHubInfoForm(this.state.submittedUsername, this.apiFormHandler) : null}
           {this.state.display_table ? <ApiMainWrapper apiRepos={this.state.apiRepos} resetState={this.resetState}/> : null}
         </header>
     );
