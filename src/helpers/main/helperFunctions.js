@@ -1,23 +1,13 @@
-function homeButtonClickHandler(){
+import Popup from 'react-popup';
+
+export function homeButtonClickHandler(){
   this.setState({
     on_home: false,
     display_form: true
   })
 }
 
-function generateApi(event){
-  event.preventDefault()
-  this.setState({
-    token: document.forms["github-info-form"]["token"].value,
-    user: document.forms["github-info-form"]["user"].value,
-    display_form: false,
-    display_api: true,
-    on_home: false
-  })
-}
-
-
-function resetState(){
+export function resetState(){
   this.setState({
     on_home: true,
     display_form: false,
@@ -27,8 +17,56 @@ function resetState(){
   })
 }
 
+export  function apiFormHandler(event){
+  event.preventDefault()
 
-module.exports = {
-          homeButtonClickHandler,
-          generateApi,
-          resetState}
+  if(event.target.name === 'user'){
+    this.setState({user: event.target.value})
+  }
+  else if(event.target.name === 'token'){
+    this.setState({token: event.target.value})
+  }
+  else if(event.target.parentElement.name === 'submit'){
+    let noUser = false
+    let noToken = false
+
+    if(!this.state.user || this.state.user.trim().length === 0){
+      noUser = true
+    }
+
+    else if(!this.state.token || this.state.token.trim().length === 0){
+      noToken = true
+    }
+
+    if(noToken || noUser){
+      let errorMessage = ''
+      if(noToken) errorMessage += 'You need to have a valid token generated from GitHub.'
+      if(noUser) errorMessage += ' Please make sure you entered your full GitHub username.'
+      createPopup(errorMessage)
+    }
+
+    else {
+      this.setState({
+        display_form: false,
+        on_home: false,
+        form_submitted: true
+      })
+    }
+  }
+}
+
+function createPopup(message){
+  console.log(`popup: ${message}`)
+  Popup.create({
+      title: "Incomplete Form",
+      content: message,
+      buttons: {
+          right: [{
+              text: 'Ok',
+              action: function () {
+                   Popup.close()
+              }
+          }]
+      }
+  });
+}

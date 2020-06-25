@@ -18,6 +18,7 @@ async function fetchRepos(user, token, setStateFunction){
         },
       })
       .then(res => {
+        console.log('response data: ', res.data)
         if (res.data.length === 0) {
           stopFinding = true;
           return;
@@ -37,8 +38,11 @@ async function fetchRepos(user, token, setStateFunction){
         stopFinding = true;
       }, () => Popup.alert('Oops, something went wrong! Try another token if this doesn`t work again.'));
   }
-
-
+console.log(`repos from pai${apiRepos}`)
+  if(apiRepos.length === 0){
+    Popup.alert('Uh oh, we didn\'t find any repositories with those credentials. Please check the visibility of the repositories (public/private)! Try another token if this doesn`t work again.')
+    return
+  }
   return apiRepos
 }
 

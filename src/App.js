@@ -3,22 +3,35 @@ import './index.css';
 import ApiMainWrapper from './components/api/ApiMainWrapper'
 import homeButton from './functionalComponents/handlers/homeButton'
 import gitHubInfoForm from './helpers/main/gitHubInfoForm'
-import instructionsHandler from './functionalComponents/handlers/instructionsHandler'
-   import {homeButtonClickHandler, generateApi, resetState} from './helpers/main/helperFunctions.js'
-   import EnhancedTable from './functionalComponents/table/materialUITable'
+import fetchRepos from './functionalComponents/api/fetchRepos'
+import repoMapper from './helpers/api/repoMapper'
+   import {homeButtonClickHandler, apiFormHandler, resetState} from './helpers/main/helperFunctions.js'
+
 class App extends Component {
   state = {
     on_home: true,
     display_form: false,
-    display_api: false,
+    display_table: false,
+    form_submitted: false,
+    form_info: {},
     token: null,
-    user: null
+    user: null,
+    apiRepos: []
   }
 
   homeButtonClickHandler = homeButtonClickHandler.bind(this)
-  generateApi = generateApi.bind(this)
+  apiFormHandler = apiFormHandler.bind(this)
   resetState = resetState.bind(this)
 
+  componentDidMount(){
+    if(this.state.form_submitted){
+      fetchRepos(this.user, this.token)
+      .then( result => {
+        const apiRepos = repoMapper(result)
+        this.setState({apiRepos})
+      })
+    }
+  }
 
 
 
@@ -27,8 +40,8 @@ class App extends Component {
     return (
         <header className="App">
           {this.state.on_home ? homeButton(this.homeButtonClickHandler) : null}
-          {this.state.display_form ? gitHubInfoForm(this.generateApi) : null}
-          {this.state.display_api ? <ApiMainWrapper token={this.state.token} user={this.state.user} resetState={this.resetState}/> : null}
+          {this.state.display_form ? gitHubInfoForm(this.apiFormHandler) : null}
+          {this.state.display_table ? <ApiMainWrapper token={this.state.token} user={this.state.user} resetState={this.resetState}/> : null}
         </header>
     );
   }

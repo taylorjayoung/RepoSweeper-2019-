@@ -1,9 +1,5 @@
-import React, {Component, Fragment} from 'react'
-import $ from 'jquery';
+import React, {Component} from 'react'
 import { Button, Icon } from 'semantic-ui-react'
-import Popup from 'react-popup';
-import repoMapper from '../../helpers/api/repoMapper'
-import fetchRepos from '../../functionalComponents/api/fetchRepos'
 import deleteRepos from '../../functionalComponents/api/deleteRepos'
 import MaterialUITable from '../../functionalComponents/table/materialUITable.js'
 
@@ -16,23 +12,15 @@ const optionsCursorTrueWithMargin = {
 }
 
 export default class ApiMainWrapper extends Component{
-  state = {
-    rows: [],
-    originalRows: [],
-    phase: 0,
-    selected: [],
-    rowsToDelete: []
-  }
-
 
   buttonRender = this.buttonRender.bind(this)
   updateSelected = this.updateSelected.bind(this)
 
-  async componentDidMount(){
-    fetchRepos(this.props.user, this.props.token)
-    .then( result => {
-      const rows = repoMapper(result)
-      this.setState({rows, reposLoaded: true, phase: 1, originalRows: rows})
+componentDidMount(props){
+    this.setState({
+      rows: props.apiRepos,
+      phase: 1,
+      originalRows: props.apiRepos
     })
   }
 
@@ -136,11 +124,11 @@ updatePhase(move, exception){
             <br/>
           <div id="table-div">
             <div id="new-table">
-              {reposLoaded ? <MaterialUITable
+              <MaterialUITable
                 rows={rows}
                 selected={selected}
                 updateSelected={updateSelected}
-                /> : null}
+                />
             </div>
           </div>
         </div>
