@@ -1,5 +1,6 @@
 import React from 'react'
 import Popup from 'react-popup';
+
 const axios = require('axios');
 const fs = require('browserify-fs');
 
@@ -9,6 +10,8 @@ async function fetchRepos(user, token, setStateFunction){
   let apiRepos = [];
   let page = 1;
   let stopFinding = false;
+
+  console.log('fetching repos...')
   while (!stopFinding) {
     await axios
       .get(URL, {
@@ -18,8 +21,8 @@ async function fetchRepos(user, token, setStateFunction){
         },
       })
       .then(res => {
-        console.log('response data: ', res.data)
         if (res.data.length === 0) {
+          console.log('found 0.. returning')
           stopFinding = true;
           return;
         }
@@ -38,12 +41,9 @@ async function fetchRepos(user, token, setStateFunction){
         stopFinding = true;
       }, () => Popup.alert('Oops, something went wrong! Try another token if this doesn`t work again.'));
   }
-console.log(`repos from pai${apiRepos}`)
-  if(apiRepos.length === 0){
-    Popup.alert('Uh oh, we didn\'t find any repositories with those credentials. Please check the visibility of the repositories (public/private)! Try another token if this doesn`t work again.')
-    return
-  }
-  return apiRepos
+  console.log(`repos from api${JSON.stringify(apiRepos)}`)
+    return apiRepos
+
 }
 
 export default fetchRepos

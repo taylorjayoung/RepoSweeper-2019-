@@ -20,8 +20,10 @@ export function resetState(){
 export  function apiFormHandler(event){
   event.preventDefault()
 
+  console.log('form handling')
+
   if(event.target.name === 'user'){
-    this.setState({user: event.target.value})
+    this.setState({username: event.target.value})
   }
   else if(event.target.name === 'token'){
     this.setState({token: event.target.value})
@@ -30,7 +32,7 @@ export  function apiFormHandler(event){
     let noUser = false
     let noToken = false
 
-    if(!this.state.user || this.state.user.trim().length === 0){
+    if(!this.state.username || this.state.username.trim().length === 0){
       noUser = true
     }
 
@@ -50,7 +52,7 @@ export  function apiFormHandler(event){
         display_form: false,
         on_home: false,
         form_submitted: true
-      })
+      }, () => console.log(`setting state after form: ${JSON.stringify(this.state)}`))
     }
   }
 }

@@ -6,6 +6,7 @@ import gitHubInfoForm from './helpers/main/gitHubInfoForm'
 import fetchRepos from './functionalComponents/api/fetchRepos'
 import repoMapper from './helpers/api/repoMapper'
    import {homeButtonClickHandler, apiFormHandler, resetState} from './helpers/main/helperFunctions.js'
+   import Popup from 'react-popup';
 
 class App extends Component {
   state = {
@@ -15,7 +16,7 @@ class App extends Component {
     form_submitted: false,
     form_info: {},
     token: null,
-    user: null,
+    username: null,
     apiRepos: []
   }
 
@@ -23,12 +24,22 @@ class App extends Component {
   apiFormHandler = apiFormHandler.bind(this)
   resetState = resetState.bind(this)
 
-  componentDidMount(){
-    if(this.state.form_submitted){
-      fetchRepos(this.user, this.token)
-      .then( result => {
-        const apiRepos = repoMapper(result)
-        this.setState({apiRepos})
+  componentDidUpdate(){
+      if(this.state.apiRepos.length === 0 && this.state.form_submitted){
+        fetchRepos(this.username, this.token)
+        .then( result => {
+          const apiRepos = repoMapper(result)
+
+          console.log(`api repo resul in cdm: ${JSON.stringify(apiRepos)}`)
+          if(apiRepos.length === 0 || apiRepos.length === 1){
+            if(apiRepos.length === 0 || apiRepos[0].full_name ==="undefined/undefined.github.io"){
+              Popup.alert('Uh oh, we didn\'t find any repositories with those credentials. Please check the visibility of the repositories (public/private)! Try another token if this doesn`t work again. And check the spelling of your username.')
+              this.setState({display_form: true, form_submitted: false})
+            }
+          }
+            else {
+            this.setState({apiRepos, display_table: true})
+          }
       })
     }
   }
@@ -40,8 +51,8 @@ class App extends Component {
     return (
         <header className="App">
           {this.state.on_home ? homeButton(this.homeButtonClickHandler) : null}
-          {this.state.display_form ? gitHubInfoForm(this.apiFormHandler) : null}
-          {this.state.display_table ? <ApiMainWrapper token={this.state.token} user={this.state.user} resetState={this.resetState}/> : null}
+          {this.state.display_form ? gitHubInfoForm(this.state.username, this.apiFormHandler) : null}
+          {this.state.display_table ? <ApiMainWrapper apiRepos={this.state.apiRepos} resetState={this.resetState}/> : null}
         </header>
     );
   }
