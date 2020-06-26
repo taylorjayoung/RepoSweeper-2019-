@@ -5,13 +5,16 @@ const axios = require('axios');
 const fs = require('browserify-fs');
 
 async function fetchRepos(user, token, setStateFunction){
-  const username = user;
+
   const URL = `https://api.github.com/users/${user}/repos`;
+  console.log(`URL: ${URL}`)
+
   let apiRepos = [];
   let page = 1;
   let stopFinding = false;
 
   console.log('fetching repos...')
+
   while (!stopFinding) {
     await axios
       .get(URL, {
@@ -22,9 +25,8 @@ async function fetchRepos(user, token, setStateFunction){
       })
       .then(res => {
         if (res.data.length === 0) {
-          console.log('found 0.. returning')
+          console.log('found 0.. ', res.data)
           stopFinding = true;
-          return;
         }
         const repo = res.data
         console.log(

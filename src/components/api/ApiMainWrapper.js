@@ -12,15 +12,21 @@ const optionsCursorTrueWithMargin = {
 }
 
 export default class ApiMainWrapper extends Component{
+  state = {
+    rows: [],
+    phase: 0,
+    selected: [],
+    rowsToDelete: []
+  }
 
   buttonRender = this.buttonRender.bind(this)
   updateSelected = this.updateSelected.bind(this)
 
-componentDidMount(props){
+componentDidMount(){
     this.setState({
-      rows: props.apiRepos,
+      rows: this.props.apiRepos,
       phase: 1,
-      originalRows: props.apiRepos
+      originalRows: this.props.apiRepos
     })
   }
 
@@ -111,7 +117,7 @@ updatePhase(move, exception){
 
   render(){
     const { user, token, resetState } = this.props
-    const { rows, reposLoaded, phase, selected, rowsToDelete } = this.state
+    const { rows, phase, selected, rowsToDelete } = this.state
     const { buttonRender, instructionsHandler, updateSelected} = this
     return(
         <div class="animated fadeInRight">

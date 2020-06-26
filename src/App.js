@@ -17,7 +17,6 @@ class App extends Component {
     form_info: {},
     token: null,
     username: null,
-    submittedUsername: null,
     apiRepos: []
   }
 
@@ -27,11 +26,10 @@ class App extends Component {
 
   componentDidUpdate(){
       if(this.state.apiRepos.length === 0 && this.state.form_submitted){
-        fetchRepos(this.username, this.token)
+        fetchRepos(this.state.username, this.state.token)
         .then( result => {
           const apiRepos = repoMapper(result)
 
-          console.log(`api repo resul in cdm: ${JSON.stringify(apiRepos)}`)
           if(apiRepos.length === 0 || apiRepos.length === 1){
             if(apiRepos.length === 0 || apiRepos[0].full_name ==="undefined/undefined.github.io"){
               Popup.alert('Uh oh, we didn\'t find any repositories with those credentials. Please check the visibility of the repositories (public/private)! Try another token if this doesn`t work again. And check the spelling of your username.')
@@ -52,7 +50,7 @@ class App extends Component {
     return (
         <header className="App">
           {this.state.on_home ? homeButton(this.homeButtonClickHandler) : null}
-          {this.state.display_form ? gitHubInfoForm(this.state.submittedUsername, this.apiFormHandler) : null}
+          {this.state.display_form ? gitHubInfoForm(this.apiFormHandler) : null}
           {this.state.display_table ? <ApiMainWrapper apiRepos={this.state.apiRepos} resetState={this.resetState}/> : null}
         </header>
     );
