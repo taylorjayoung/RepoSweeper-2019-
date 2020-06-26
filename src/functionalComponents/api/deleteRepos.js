@@ -5,10 +5,12 @@ const fs = require('browserify-fs');
 
 function deleteRepos(user, token, repos, resetState){
   console.log('waiting for confirmation...')
+  console.log(`token: ${token}`)
+  console.log(`user: ${user}`)
 //confirmation popup
  Popup.create({
      title: null,
-     content: 'By clicking Ok you are permanently deleting the previously selected repositories.',
+     content: 'By clicking Confirm you are permanently deleting the previously selected repositories.',
      buttons: {
          left: [{
              text: 'Cancel',
@@ -17,7 +19,7 @@ function deleteRepos(user, token, repos, resetState){
              }
          }],
          right: [{
-             text: 'Delete',
+             text: 'Confirm',
              className: 'danger',
              action: function () {
                repos.forEach(async repo => {
@@ -30,10 +32,10 @@ function deleteRepos(user, token, repos, resetState){
                      access_token: token,
                    },
                  })
+                   .then(() => Popup.close())
                    .then(() => {
                      resetState();
                    })
-                   .then(() => Popup.close())
                    .then(() => {
                       Popup.alert(`The following repos have been deleted: ${repos.map( r => r.name)} ! If you want to check your repos, generate a new token or wait 5 minutes!`);
                    })

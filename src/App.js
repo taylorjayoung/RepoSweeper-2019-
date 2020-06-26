@@ -25,8 +25,10 @@ class App extends Component {
   resetState = resetState.bind(this)
 
   componentDidUpdate(){
-      if(this.state.apiRepos.length === 0 && this.state.form_submitted){
-        fetchRepos(this.state.username, this.state.token)
+      const {apiRepos, username, token } = this.state
+      const {form_submitted} = this
+      if(apiRepos.length === 0 && form_submitted){
+        fetchRepos(username, token)
         .then( result => {
           const apiRepos = repoMapper(result)
 
@@ -47,11 +49,13 @@ class App extends Component {
 
 
   render() {
+    const {display_form, display_table, apiRepos, user, token, on_home} = this.state
+    const {resetState, apiFormHandler,homeButtonClickHandler} = this
     return (
         <header className="App">
-          {this.state.on_home ? homeButton(this.homeButtonClickHandler) : null}
-          {this.state.display_form ? gitHubInfoForm(this.apiFormHandler) : null}
-          {this.state.display_table ? <ApiMainWrapper apiRepos={this.state.apiRepos} resetState={this.resetState}/> : null}
+          {on_home ? homeButton(homeButtonClickHandler) : null}
+          {display_form ? gitHubInfoForm(apiFormHandler) : null}
+          {display_table ? <ApiMainWrapper apiRepos={apiRepos} user={user} token={token} resetState={resetState}/> : null}
         </header>
     );
   }
