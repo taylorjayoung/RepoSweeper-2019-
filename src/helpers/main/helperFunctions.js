@@ -13,14 +13,14 @@ export function resetState(){
     display_form: false,
     display_api: false,
     token: null,
-    user: null
+    username: null,
+    display_table: false,
+    apiRepos: null
   })
 }
 
 export  function apiFormHandler(event){
   event.preventDefault()
-
-  console.log('form handling')
 
   if(event.target.name === 'user'){
     this.setState({username: event.target.value})
@@ -52,7 +52,6 @@ export  function apiFormHandler(event){
         display_form: false,
         on_home: false,
         form_submitted: true,
-        submittedUsername: this.state.username
       }, () => console.log(`setting state after form: ${JSON.stringify(this.state)}`))
     }
   }
