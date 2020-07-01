@@ -13,8 +13,6 @@ async function fetchRepos(user, token, setStateFunction){
   let page = 1;
   let stopFinding = false;
 
-  console.log('fetching repos...')
-
   while (!stopFinding) {
     await axios
       .get(URL, {
@@ -25,7 +23,6 @@ async function fetchRepos(user, token, setStateFunction){
       })
       .then(res => {
         if (res.data.length === 0) {
-          console.log('found 0.. ', res.data)
           stopFinding = true;
         }
         const repo = res.data
@@ -43,7 +40,6 @@ async function fetchRepos(user, token, setStateFunction){
         stopFinding = true;
       }, () => Popup.alert('Oops, something went wrong! Try another token if this doesn`t work again.'));
   }
-  console.log(`repos from api${JSON.stringify(apiRepos)}`)
 
     return apiRepos
 

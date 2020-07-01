@@ -3,11 +3,10 @@ import { Button, Input, Icon } from 'semantic-ui-react'
 import instructionsHandler from '../../functionalComponents/handlers/instructionsHandler'
 
 export default function gitHubInfoForm(apiFormHandler){
-  
+
   return(
     <form id="github-info-form" name="github-info-form" class="animated fadeInRight">
       <label>GitHub Username & Access Token</label>
-      <label></label>
       <div className="info-form-text">
         <Input focus className="input" placeholder='githubUser1' name="user" onKeyUp={(event)=> apiFormHandler(event)}></Input>
       </div>

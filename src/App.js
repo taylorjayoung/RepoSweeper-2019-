@@ -26,7 +26,7 @@ class App extends Component {
 
   componentDidUpdate(){
       const  {username, token, form_submitted } = this.state
-      console.log(`username: ${username}, token: ${token}`)
+
       if(this.state.apiRepos.length === 0 && form_submitted){
         fetchRepos(username, token)
         .then( result => {
@@ -35,6 +35,8 @@ class App extends Component {
             if(apiRepos.length === 0 || apiRepos[0].full_name ==="undefined/undefined.github.io"){
               Popup.alert('Uh oh, we didn\'t find any repositories with those credentials. Please check the visibility of the repositories (public/private)! Try another token if this doesn`t work again. And check the spelling of your username.')
               this.setState({display_form: true, form_submitted: false})
+            } else {
+              this.setState({apiRepos, display_table: true})
             }
           }
             else {
