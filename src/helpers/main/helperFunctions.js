@@ -15,7 +15,7 @@ export function resetState(){
     token: null,
     username: null,
     display_table: false,
-    apiRepos: null
+    apiRepos: []
   })
 }
 
