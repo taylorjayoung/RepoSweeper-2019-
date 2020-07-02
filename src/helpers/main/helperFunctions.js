@@ -12,6 +12,7 @@ export function resetState(){
     on_home: true,
     display_form: false,
     display_api: false,
+    form_submitted: false,
     token: null,
     username: null,
     display_table: false,
