@@ -166,7 +166,7 @@ const EnhancedTableToolbar = props => {
           id="tableTitle"
           component="div"
         >
-          Nutrition
+          GitHub Repositories
         </Typography>
       )}
 
