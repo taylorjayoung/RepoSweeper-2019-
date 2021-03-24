@@ -28,8 +28,8 @@ function deleteRepos(user, token, repos, resetState){
                  await axios({
                    method: 'delete',
                    url: URL,
-                   params: {
-                     access_token: token,
+                   headers: {
+                     'Authorization': `token ${token}`
                    },
                  })
                    .then(() => Popup.close())

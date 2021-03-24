@@ -18,7 +18,9 @@ async function fetchRepos(user, token, setStateFunction){
       .get(URL, {
         params: {
           page,
-          access_token: token,
+        },
+        headers: {
+          'Authorization': `token ${token}`
         },
       })
       .then(res => {
