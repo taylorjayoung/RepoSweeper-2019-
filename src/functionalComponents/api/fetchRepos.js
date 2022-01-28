@@ -21,7 +21,7 @@ async function fetchRepos(user, token, setStateFunction){
 
   while (!stopFinding) {
     await axiosInstance
-      .get(URL, {
+      .get(URL,{ 
         params: {
           page        
         },
