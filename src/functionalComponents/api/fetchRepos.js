@@ -12,13 +12,17 @@ async function fetchRepos(user, token, setStateFunction){
   let apiRepos = [];
   let page = 1;
   let stopFinding = false;
+  const axiosInstance = axios.create({
+    baseURL: URL,
+    timeout: 1000,
+    headers: {'Authorization': `Authorization: token ${token}`}
+  });
 
   while (!stopFinding) {
-    await axios
+    await axiosInstance
       .get(URL, {
         params: {
-          page,
-          access_token: token,
+          page        
         },
       })
       .then(res => {
@@ -27,7 +31,7 @@ async function fetchRepos(user, token, setStateFunction){
         }
         const repo = res.data
         console.log(
-          `[Page ${page}] Found ${apiRepos.length} forked repo(s) out of ${
+          `[Page ${page}] Found ${apiRepos.length} repo(s) out of ${
             res.data.length
           }:`,
 
