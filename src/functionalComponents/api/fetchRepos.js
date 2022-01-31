@@ -15,13 +15,12 @@ async function fetchRepos(user, token, setStateFunction){
   const axiosInstance = axios.create({
     baseURL: URL,
     timeout: 1000,
-    responseType: "json",
-    headers: {'Authorization': `Authorization: token ${token}`, Accept: "application/json" }
+    headers: {'Authorization': `Authorization: token ${token}`}
   });
 
   while (!stopFinding) {
     await axiosInstance
-      .get(URL,{ 
+      .get(URL, {
         params: {
           page        
         },

@@ -27,12 +27,13 @@ function deleteRepos(user, token, repos, resetState){
                  const headers = { 'Authorization': token, }
                  console.log(`url to delete: ${URL}`)
                  console.log(`headers: ${headers}`)
+                 debugger
                  await axios({
                    method: 'delete',
+                   user: user,
                    url: URL,
-                   params: {
-                     access_token: token,
-                   },
+                   Authorization: `Bearer ${token}`,
+                   "Content-Type": "application/json"
                  })
                    .then(() => Popup.close())
                    .then(() => {
