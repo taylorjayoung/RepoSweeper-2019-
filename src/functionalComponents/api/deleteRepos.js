@@ -24,13 +24,16 @@ function deleteRepos(user, token, repos, resetState){
              action: function () {
                repos.forEach(async repo => {
                  const URL = `https://api.github.com/repos/${repo.full_name}`;
+                 const headers = { 'Authorization': token, }
                  console.log(`url to delete: ${URL}`)
+                 console.log(`headers: ${headers}`)
+                 debugger
                  await axios({
                    method: 'delete',
+                   user: user,
                    url: URL,
-                   params: {
-                     access_token: token,
-                   },
+                   Authorization: `Bearer ${token}`,
+                   "Content-Type": "application/json"
                  })
                    .then(() => Popup.close())
                    .then(() => {

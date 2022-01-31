@@ -50,13 +50,13 @@ class App extends Component {
 
 
   render() {
-    const {display_form, display_table, apiRepos, user, token, on_home} = this.state
+    const {display_form, display_table, apiRepos, username, token, on_home} = this.state
     const {resetState, apiFormHandler,homeButtonClickHandler} = this
     return (
         <header className="App">
           {on_home ? homeButton(homeButtonClickHandler) : null}
           {display_form ? gitHubInfoForm(apiFormHandler) : null}
-          {display_table ? <ApiMainWrapper apiRepos={apiRepos} user={user} token={token} resetState={resetState}/> : null}
+          {display_table ? <ApiMainWrapper apiRepos={apiRepos} user={username} token={token} resetState={resetState}/> : null}
         </header>
     );
   }

@@ -261,3 +261,24 @@ body {
   max-width: 80%;
   margin: auto;
 }
+
+
+
+body {
+  background-image: url("maintenance.png");
+}
+
+.maintenance {
+  margin: auto;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.maintenance_message {
+  font-size: 8.5em;
+  font-weight: bold;
+  color:  white;
+  font-family: 'Source Serif 4', sans-serif;
+  padding: 15px;
+}
+
