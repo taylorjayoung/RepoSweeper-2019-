@@ -39,7 +39,6 @@ class App extends Component {
         return;
       }
 
-      // apiRepos[0].full_name ==="undefined/undefined.github.io" - failure case?
       const apiRepos = repoMapper(repos)
 
       this.setState({apiRepos, display_table: true})
