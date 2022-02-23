@@ -33,7 +33,7 @@ export default class ApiMainWrapper extends Component{
   buttonRender(phase, user, token, rowsToDelete, resetState) {
     const octokit = getOctokit(token);
     if (phase === stage.FETCHED) {
-      return(
+      return (
         <div>
           
           <Button animated className="blue button" onClick={() => {
@@ -46,31 +46,28 @@ export default class ApiMainWrapper extends Component{
             </Button.Content>
           </Button>
         </div>
-        )
-      }
-    else if(phase === stage.TO_DELETE){
-      return(
+      )
+    } else if (phase === stage.TO_DELETE) {
+      return (
         <div>
-          <Button animated className="blue button" onClick={()=> this.updatePhase(-1, 'back')}>
+          <Button animated className="blue button" onClick={() => this.updatePhase(-1, 'back')}>
             <Button.Content visible>Go back</Button.Content>
             <Button.Content hidden>
               <Icon name='arrow left' />
             </Button.Content>
           </Button>
-          <Button animated className="red button delete-button" onClick={()=> deleteRepos(octokit, rowsToDelete, resetState)}>
+          <Button animated className="red button delete-button" onClick={() => deleteRepos(octokit, rowsToDelete, resetState)}>
             <Button.Content visible>Confirm</Button.Content>
             <Button.Content hidden>
               <Icon name='trash alternate' />
             </Button.Content>
           </Button>
-          </div>
-        )
+        </div>
+      )
 
-    }
-    else if (phase === stage.UNKNOWN){
+    } else if (phase === stage.UNKNOWN) {
       return
     }
-
   }
 
   updatePhase(move, exception) {
@@ -78,12 +75,11 @@ export default class ApiMainWrapper extends Component{
     
     if( updatedPhase === stage.FETCHED &! exception){
       this.setState({phase: updatedPhase })
-    }
-    else if (updatedPhase === stage.FETCHED && exception){
+    } else if (updatedPhase === stage.FETCHED && exception){
       this.setState({phase: updatedPhase, rows: this.state.originalRows })
     }
 
-    if (updatedPhase === stage.TO_DELETE){
+    if (updatedPhase === stage.TO_DELETE) {
       const rowsToDelete = [];
       this.state.rows.forEach( row => {
         if(this.state.selected.includes(row.name)){
@@ -118,7 +114,6 @@ export default class ApiMainWrapper extends Component{
     this.setState({selected: selectedRows, rowsToDelete}, () => console.log(`the mfs getting deleted are.. ${this.state.rowsToDelete}`))
   }
 
-
   render(){
     const { user, token, resetState } = this.props
     const { rows, phase, selected, rowsToDelete } = this.state
@@ -145,5 +140,4 @@ export default class ApiMainWrapper extends Component{
         </div>
     )
   }
-
 }
