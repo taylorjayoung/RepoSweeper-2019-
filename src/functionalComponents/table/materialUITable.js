@@ -14,13 +14,8 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
-import repoMapper from '../../helpers/api/repoMapper'
-
-
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -210,7 +205,8 @@ export default function EnhancedTable(props) {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [ rowsPerPage, setRowsPerPage ] = React.useState(10);
+  const [firstSelected, setFirstSelected] = React.useState(false);
   const rows = props.rows
 
   const handleRequestSort = (event, property) => {
@@ -277,6 +273,17 @@ return
     console.log(`error! ${e}`)
   }
 
+  // This is a workaround for the issues with selected state between the selected and not selected pagination
+  const pages = props.phase === 2 && props.page !== 0 && firstSelected === false ? [ 0, rowsPerPage ] : [ page * rowsPerPage, page * rowsPerPage + rowsPerPage ]
+  
+  if (props.phase === 2 && props.page !== 0 && firstSelected === false) {
+    setFirstSelected(true);
+    setPage(0);
+  } 
+  
+  if (props.phase === 1 && firstSelected === true) {
+    setFirstSelected(false);
+  }
 
   return (
     <div className={classes.root}>
@@ -300,7 +307,7 @@ return
             />
           <TableBody>
               {stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .slice(...pages)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);
                   const labelId = `enhanced-table-checkbox-${index}`;

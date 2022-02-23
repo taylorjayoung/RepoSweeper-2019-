@@ -1,12 +1,13 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import './index.css';
 import ApiMainWrapper from './components/api/ApiMainWrapper'
 import homeButton from './functionalComponents/handlers/homeButton'
 import gitHubInfoForm from './helpers/main/gitHubInfoForm'
 import fetchRepos from './functionalComponents/api/fetchRepos'
 import repoMapper from './helpers/api/repoMapper'
-   import {homeButtonClickHandler, apiFormHandler, resetState} from './helpers/main/helperFunctions.js'
-   import Popup from 'react-popup';
+import {homeButtonClickHandler, apiFormHandler, resetState} from './helpers/main/helperFunctions.js'
+import Popup from 'react-popup';
+import { getOctokit } from './helpers/api/git';
 
 class App extends Component {
   state = {
@@ -24,30 +25,26 @@ class App extends Component {
   apiFormHandler = apiFormHandler.bind(this)
   resetState = resetState.bind(this)
 
-  componentDidUpdate(){
-      const  {username, token, form_submitted } = this.state
+  async componentDidUpdate(){
+    const { username, token, form_submitted } = this.state;
 
-      if(this.state.apiRepos.length === 0 && form_submitted){
-        fetchRepos(username, token)
-        .then( result => {
-          const apiRepos = repoMapper(result)
-          if(apiRepos.length === 0 || apiRepos.length === 1){
-            if(apiRepos.length === 0 || apiRepos[0].full_name ==="undefined/undefined.github.io"){
-              Popup.alert('Uh oh, we didn\'t find any repositories with those credentials. Please check the visibility of the repositories (public/private)! Try another token if this doesn`t work again. And check the spelling of your username.')
-              this.setState({display_form: true, form_submitted: false})
-            } else {
-              this.setState({apiRepos, display_table: true})
-            }
-          }
-            else {
-            this.setState({apiRepos, display_table: true})
-          }
-      })
+    const octokit = getOctokit(token);
+
+    if (this.state.apiRepos.length === 0 && form_submitted) {
+      const repos = await fetchRepos(octokit, username);
+
+      if (!repos.length) {
+        Popup.alert('Uh oh, we didn\'t find any repositories with those credentials. Please check the visibility of the repositories (public/private)! Try another token if this doesn`t work again. And check the spelling of your username.')
+        this.setState({display_form: true, form_submitted: false})
+        return;
+      }
+
+      // apiRepos[0].full_name ==="undefined/undefined.github.io" - failure case?
+      const apiRepos = repoMapper(repos)
+
+      this.setState({apiRepos, display_table: true})
     }
   }
-
-
-
 
   render() {
     const {display_form, display_table, apiRepos, username, token, on_home} = this.state
