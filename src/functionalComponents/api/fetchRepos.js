@@ -19,12 +19,9 @@ const getRecursively = async (octokit, items = [], page = 1, username) => {
     per_page: GITHUB_PAGE_LIMIT,
     page,
   });
-  
-  // Filter to repos that can be deleted
-  const myReposOnly = res.data.filter(r => r.owner.login === username);
 
   // Spread in previous request repos
-  const accumulatedRes = [ ...items, ...myReposOnly ];
+  const accumulatedRes = [ ...items, ...res.data ];
 
   // If the request is the page limit, try to get the next page
   if (res.data.length === GITHUB_PAGE_LIMIT) {
@@ -39,6 +36,7 @@ async function fetchRepos(octokit, username) {
   // Paginate through the API and get all of the repos
   const repos = await getRecursively(octokit, [], 1, username).catch(e => {
     Popup.alert('Oops, something went wrong! Try another token if this doesn`t work again.');
+    return []
   });
 
   return repos;
