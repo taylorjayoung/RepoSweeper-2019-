@@ -1,52 +1,45 @@
-import React from 'react'
 import Popup from 'react-popup';
 
-const axios = require('axios');
-const fs = require('browserify-fs');
+const GITHUB_PAGE_LIMIT = 75;
+const getReposEndpoint = `GET /user/repos?affiliation=owner`
 
-async function fetchRepos(user, token, setStateFunction){
+/**
+ * Recursively paginate through the request
+ */
+const getRecursively = async (octokit, items = [], page = 1, username) => {
+  // Wait between paginations for rate limiting
+  await new Promise(resolve => {
+    setTimeout(() => {
+      resolve()
+    }, 25)
+  })
 
-  const URL = `https://api.github.com/users/${user}/repos`;
-  console.log(`URL: ${URL}`)
-
-  let apiRepos = [];
-  let page = 1;
-  let stopFinding = false;
-  const axiosInstance = axios.create({
-    baseURL: URL,
-    timeout: 1000,
-    headers: {'Authorization': `Authorization: token ${token}`}
+  // Get repos
+  const res = await octokit.request(getReposEndpoint, {
+    per_page: GITHUB_PAGE_LIMIT,
+    page,
   });
 
-  while (!stopFinding) {
-    await axiosInstance
-      .get(URL, {
-        params: {
-          page        
-        },
-      })
-      .then(res => {
-        if (res.data.length === 0) {
-          stopFinding = true;
-        }
-        const repo = res.data
-        console.log(
-          `[Page ${page}] Found ${apiRepos.length} repo(s) out of ${
-            res.data.length
-          }:`,
+  // Spread in previous request repos
+  const accumulatedRes = [ ...items, ...res.data ];
 
-        );
-        apiRepos.push(...repo);
-        page++;
-      })
-      .catch(err => {
-        console.error(`Error fetching page ${page}: ${err}`);
-        stopFinding = true;
-      }, () => Popup.alert('Oops, something went wrong! Try another token if this doesn`t work again.'));
+  // If the request is the page limit, try to get the next page
+  if (res.data.length === GITHUB_PAGE_LIMIT) {
+    return getRecursively(octokit, accumulatedRes, page + 1, username);
   }
 
-    return apiRepos
+  // Return all repos
+  return accumulatedRes;
+}
 
+async function fetchRepos(octokit, username) {
+  // Paginate through the API and get all of the repos
+  const repos = await getRecursively(octokit, [], 1, username).catch(e => {
+    Popup.alert('Oops, something went wrong! Try another token if this doesn`t work again.');
+    return []
+  });
+
+  return repos;
 }
 
 export default fetchRepos

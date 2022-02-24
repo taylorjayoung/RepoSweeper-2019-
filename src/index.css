@@ -264,9 +264,9 @@ body {
 
 
 
-body {
-  background-image: url("maintenance.png");
-}
+/* body { */
+  /* background-image: url("maintenance.png"); */
+/* } */
 
 .maintenance {
   margin: auto;

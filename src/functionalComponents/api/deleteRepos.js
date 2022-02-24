@@ -1,57 +1,59 @@
-import React from 'react'
 import Popup from 'react-popup';
-const axios = require('axios');
-const fs = require('browserify-fs');
 
-function deleteRepos(user, token, repos, resetState){
-  console.log('waiting for confirmation...')
-  console.log(`token: ${token}`)
-  console.log(`user: ${user}`)
-//confirmation popup
- Popup.create({
-     title: null,
-     content: 'By clicking Confirm you are permanently deleting the previously selected repositories.',
-     buttons: {
-         left: [{
-             text: 'Cancel',
-             action: function () {
-                  Popup.close()
-             }
-         }],
-         right: [{
-             text: 'Confirm',
-             className: 'danger',
-             action: function () {
-               repos.forEach(async repo => {
-                 const URL = `https://api.github.com/repos/${repo.full_name}`;
-                 const headers = { 'Authorization': token, }
-                 console.log(`url to delete: ${URL}`)
-                 console.log(`headers: ${headers}`)
-                 debugger
-                 await axios({
-                   method: 'delete',
-                   user: user,
-                   url: URL,
-                   Authorization: `Bearer ${token}`,
-                   "Content-Type": "application/json"
-                 })
-                   .then(() => Popup.close())
-                   .then(() => {
-                     resetState();
-                   })
-                   .then(() => {
-                      Popup.alert(`The following repos have been deleted: ${repos.map( r => r.name)} ! If you want to check your repos, generate a new token or wait 5 minutes!`);
-                   })
-                   .catch((e) => {
-                     console.error(`Error deleting ${repo.name}... ${e.message}, ${e}`);
-                   });
-               });
-             }
-         }]
-     }
- });
+const deleteRepoEndpoint = 'DELETE /repos/{owner}/{repo}'
 
+async function deleteFromGit(octokit, repos) {
+  return Promise.all(repos.map(async repo => {
+    if (!repo.owner || !repo.name) {
+      return
+    }
 
+    const args = {
+      owner: repo.owner,
+      repo: repo.name,
+    }
+    
+    const res = await octokit.request(deleteRepoEndpoint, args).catch(e => {
+      console.error(`Error deleting ${repo.name}... ${e.message}, ${e}`);
+      return;
+    })
+
+    // Success case
+    if (res && res.status === 204) {
+      return repo
+    }
+  }))
+}
+
+const closePopUp = () => Popup.close();
+
+function deleteRepos(octokit, repos, resetState){
+  // confirmation popup
+  Popup.create({
+    title: null,
+    content: `By clicking Confirm you are permanently deleting the previously selected repositories ${repos.map(r => r.name).join(' | ')} `,
+    buttons: {
+      left: [{
+        text: 'Cancel',
+        action: () => closePopUp()
+      }],
+      right: [{
+        text: 'Confirm',
+        className: 'danger',
+        action: async () => {
+          closePopUp()
+          const deletedRepos = await deleteFromGit(octokit, repos)
+          resetState();
+          Popup.alert(`
+            The following repos have been deleted:
+            
+            ${deletedRepos.filter(repo => !!repo).map(r => r.name).join(' | ')}!
+            
+            If you want to check your repos, generate a new token or wait 5 minutes!`);
+        }
+      }]
+    }
+  });
 }
 
 export default deleteRepos

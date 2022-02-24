@@ -9,6 +9,7 @@
     "faker": "^4.1.0",
     "file-system": "^2.2.2",
     "jquery": "^3.6.0",
+    "octokit": "^1.7.1",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-hover": "^1.4.0",
