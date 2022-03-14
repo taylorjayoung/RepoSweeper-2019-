@@ -1,4 +1,5 @@
 import Popup from 'react-popup';
+import axios from 'axios';
 
 const deleteRepoEndpoint = 'DELETE /repos/{owner}/{repo}'
 
@@ -25,6 +26,14 @@ async function deleteFromGit(octokit, repos) {
   }))
 }
 
+export async function saveStats(deletedRepos) {
+  console.log(deletedRepos)
+  await axios.post('https://jlcjiyccye.execute-api.eu-west-2.amazonaws.com/user/stats', {
+    deletes: deletedRepos.length,
+    githubUsername: deletedRepos[0].owner,
+  })
+}
+
 const closePopUp = () => Popup.close();
 
 function deleteRepos(octokit, repos, resetState){
@@ -43,6 +52,11 @@ function deleteRepos(octokit, repos, resetState){
         action: async () => {
           closePopUp()
           const deletedRepos = await deleteFromGit(octokit, repos)
+
+          saveStats(deletedRepos).catch(e => {
+            console.error(e, 'unable to save stats');
+          })
+
           resetState();
           Popup.alert(`
             The following repos have been deleted:
