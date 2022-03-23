@@ -8,7 +8,6 @@ import repoMapper from './helpers/api/repoMapper'
 import {homeButtonClickHandler, apiFormHandler, resetState} from './helpers/main/helperFunctions.js'
 import Popup from 'react-popup';
 import { getOctokit } from './helpers/api/git';
-import { saveStats } from './functionalComponents/api/deleteRepos';
 
 class App extends Component {
   state = {
@@ -42,7 +41,7 @@ class App extends Component {
 
       const apiRepos = repoMapper(repos)
 
-      this.setState({ apiRepos, display_table: true })
+      this.setState({apiRepos, display_table: true})
     }
   }
 
