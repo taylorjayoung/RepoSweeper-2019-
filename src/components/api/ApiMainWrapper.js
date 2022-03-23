@@ -35,11 +35,11 @@ export default class ApiMainWrapper extends Component{
     if (phase === stage.FETCHED) {
       return (
         <div>
-          
-          <Button animated className="blue button" onClick={() => {
-            this.updatePhase(1)
-          }
-          }>
+          <Button
+            animated
+            className="blue button"
+            onClick={() => this.updatePhase(1)}
+          >
             <Button.Content visible>Continue</Button.Content>
             <Button.Content hidden>
               <Icon name='arrow right' />
@@ -47,7 +47,9 @@ export default class ApiMainWrapper extends Component{
           </Button>
         </div>
       )
-    } else if (phase === stage.TO_DELETE) {
+    }
+    
+    if (phase === stage.TO_DELETE) {
       return (
         <div>
           <Button animated className="blue button" onClick={() => this.updatePhase(-1, 'back')}>
@@ -64,9 +66,6 @@ export default class ApiMainWrapper extends Component{
           </Button>
         </div>
       )
-
-    } else if (phase === stage.UNKNOWN) {
-      return
     }
   }
 

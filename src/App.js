@@ -42,10 +42,8 @@ class App extends Component {
 
       const apiRepos = repoMapper(repos)
 
-      this.setState({apiRepos, display_table: true})
+      this.setState({ apiRepos, display_table: true })
     }
-
-    await saveStats([{owner: 'rubengmurray'}])
   }
 
   render() {

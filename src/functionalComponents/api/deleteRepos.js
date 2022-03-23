@@ -27,15 +27,14 @@ async function deleteFromGit(octokit, repos) {
 }
 
 export async function saveStats(deletedRepos) {
-  console.log(deletedRepos)
-  await axios.post('https://jlcjiyccye.execute-api.eu-west-2.amazonaws.com/user/stats', {
-    deletes: deletedRepos.length,
-    githubUsername: deletedRepos[0].owner,
-  })
+  await axios.post('https://hx60s1mgyd.execute-api.us-east-1.amazonaws.com/user/stats', {
+    deletes: deletedRepos.length, // Number of repos deleted
+    githubUsername: deletedRepos[0].owner, // All repos to be deleted are owned by the user actioning the delete
+  });
 }
 
 const closePopUp = () => Popup.close();
-
+  
 function deleteRepos(octokit, repos, resetState){
   // confirmation popup
   Popup.create({
@@ -51,11 +50,12 @@ function deleteRepos(octokit, repos, resetState){
         className: 'danger',
         action: async () => {
           closePopUp()
+
+          // Delete the repos in Github
           const deletedRepos = await deleteFromGit(octokit, repos)
 
-          saveStats(deletedRepos).catch(e => {
-            console.error(e, 'unable to save stats');
-          })
+          // Save the delete stats to the RepoSweeper backend
+          saveStats(deletedRepos);
 
           resetState();
           Popup.alert(`
