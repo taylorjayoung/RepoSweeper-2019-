@@ -5,7 +5,7 @@
  Deleting GitHub repositories via the GitHub interface is a hassle. For each repository that you want to delete, you have to go to the individual repository settings, enter the name of the repository and confirm. This is not a scalable as task. There are many scripts you can use to bulk erase repositories from the command line, but they don't offer much flexibility. RepoSweeper is a React.js SPA that allows you to sort, filter and manage which repositories you want to delete, and to do so in one click of a button.
 
  <h3>Getting Started</h3>
- RepoSweeper is a tool that is meant to be used as a web application. It is pretty slim on the code side. If you just want to use the tool, visit https://repo-sweeper.herokuapp.com/
+ RepoSweeper is a tool that is meant to be used as a web application. It is pretty slim on the code side. If you just want to use the tool, visit https://reposweeper.com/
 
  Read more about how to use here: https://medium.com/@taylorjayoung/the-easiest-way-to-delete-multiple-github-repositories-at-once-e71e16734b59
 
