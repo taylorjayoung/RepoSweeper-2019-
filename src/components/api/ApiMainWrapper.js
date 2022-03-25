@@ -35,7 +35,6 @@ export default class ApiMainWrapper extends Component{
     if (phase === stage.FETCHED) {
       return (
         <div>
-          
           <Button animated className="blue button" onClick={() => {
             this.updatePhase(1)
           }
@@ -64,7 +63,6 @@ export default class ApiMainWrapper extends Component{
           </Button>
         </div>
       )
-
     } else if (phase === stage.UNKNOWN) {
       return
     }
