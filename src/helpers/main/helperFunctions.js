@@ -53,7 +53,7 @@ export  function apiFormHandler(event){
         display_form: false,
         on_home: false,
         form_submitted: true,
-      }, () => console.log(`setting state after form: ${JSON.stringify(this.state)}`))
+      })
     }
   }
 }

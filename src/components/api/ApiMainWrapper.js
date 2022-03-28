@@ -93,7 +93,6 @@ export default class ApiMainWrapper extends Component{
   }
 
   instructionsHandler(phase){
-    console.log(`instructions handler phase: ${phase}`)
       switch(phase){
         case 1 :
           return 'Select Repos to Delete then hit Continue'

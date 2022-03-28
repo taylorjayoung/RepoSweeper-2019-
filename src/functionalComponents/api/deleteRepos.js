@@ -27,7 +27,6 @@ async function deleteFromGit(octokit, repos) {
 }
 
 export async function saveStats(deletedRepos) {
-  console.log(`deleted repos: ${JSON.stringify(deletedRepos)}`)
   await axios.post('https://hx60s1mgyd.execute-api.us-east-1.amazonaws.com/user/stats', {
     deletes: deletedRepos.length, // Number of repos deleted
     githubUsername: deletedRepos[0].owner, // All repos to be deleted are owned by the user actioning the delete
