@@ -109,7 +109,7 @@ export default class ApiMainWrapper extends Component{
        return selectedRows.includes(row.name)
     })
     
-    this.setState({selected: selectedRows, rowsToDelete}, () => console.log(`the mfs getting deleted are.. ${this.state.rowsToDelete}`))
+    this.setState({selected: selectedRows, rowsToDelete})
   }
 
   render(){
