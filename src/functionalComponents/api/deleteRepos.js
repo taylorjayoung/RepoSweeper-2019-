@@ -55,7 +55,7 @@ function deleteRepos(octokit, repos, resetState){
           const deletedRepos = await deleteFromGit(octokit, repos)
 
           // Save the delete stats to the RepoSweeper backend
-          if (deletedRepos.length) {
+          if (deletedRepos && deletedRepos.filter(repo => !!repo).length) {
             saveStats(deletedRepos);
           }
 
