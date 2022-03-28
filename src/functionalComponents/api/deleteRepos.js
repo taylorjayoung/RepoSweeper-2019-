@@ -55,11 +55,11 @@ function deleteRepos(octokit, repos, resetState){
           const deletedRepos = await deleteFromGit(octokit, repos)
 
           console.log(deletedRepos, 'deletedRepos')
-          
-          const filteredRepos = deletedRepos.filter(repo => !!repo);
+
+          const filteredRepos = deletedRepos && deletedRepos.filter(repo => !!repo);
 
           // Save the delete stats to the RepoSweeper backend
-          if (filteredRepos) {
+          if (filteredRepos && filteredRepos.length) {
             saveStats(filteredRepos);
           }
 
@@ -67,7 +67,7 @@ function deleteRepos(octokit, repos, resetState){
           Popup.alert(`
             The following repos have been deleted:
             
-            ${filteredRepos.map(r => r.name).join(' | ')}!
+            ${filteredRepos && filteredRepos.length && filteredRepos.map(r => r.name).join(' | ')}!
             
             If you want to check your repos, generate a new token or wait 5 minutes!`);
         }
