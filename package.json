@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.12.3",
-    "axios": "^0.25.0",
+    "axios": "^0.32.0",
     "browserify-fs": "^1.0.0",
     "faker": "^4.1.0",
     "file-system": "^2.2.2",
